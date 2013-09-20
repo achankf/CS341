@@ -1,0 +1,51 @@
+\begin{enumerate}
+\item
+First notice that $n\log n > 0$ when $n > 1$.
+\begin{align*}
+f(n) = \Theta(g(n)) &\implies c_1 g(n) \le f(n) \le c_2 g(n), \text{ for $n > n_0 > 0$}\\
+&\implies c_1 g(n) + n\log n \le f(n) + n \log n \le c_2 g(n) + n\log n\\
+&\text{when $n > n_0 + 1$ (the plus one makes up for the log)}
+\end{align*}
+By definition, $f(n) + n\log n \in \Theta(g(n) + n\log n)$.
+\done
+
+\item
+Notice both functions are increasing functions.
+Let's rewrite $f(n)$ and $g(n)$.
+\begin{align*}
+g(n) &= \frac{1}{5}(n^2-2n)\\
+f(n) &= \frac{n^4\log n}{n + o(n)}\\
+	&\ge \frac{n^4\log n}{2n}\\
+	&\ge \frac{n^3\log n}{2}\\
+	&\ge \frac{n^3}{2} 
+\end{align*}
+Since $n^3 \in \omega(n^2)$, therefore $f(n) \in \omega(g(n))$.
+Consequently,
+\begin{tabular}{l | l}
+$f(n) \in \omega(g(n))$ & Yes\\
+$f(n) \in \Omega(g(n))$ & Yes\\
+$f(n) \in \Theta(g(n))$ & No\\
+$f(n) \in o(g(n))$ & No\\
+$f(n) \in O(g(n))$ & No
+\end{tabular}
+\done
+
+\item
+Notice both functions are increasing functions.
+Assume $\log$ is in base $b$.
+Consider the exponent of $f(n)$.
+\begin{align*}
+\lim_{n \to +\infty} \frac{f(n)}{g(n)} &= \lim_{n \to +\infty} \frac{1}{n^\frac{1}{\log n}}\\
+	&= 1
+\end{align*}
+The limit implies that $f(n) \in \Theta(g(n))$.
+Consequently,
+\begin{tabular}{l | l}
+$f(n) \in \omega(g(n))$ & No\\
+$f(n) \in \Omega(g(n))$ & Yes\\
+$f(n) \in \Theta(g(n))$ & Yes\\
+$f(n) \in o(g(n))$ & No\\
+$f(n) \in O(g(n))$ & Yes
+\end{tabular}
+\done
+\end{enumerate}

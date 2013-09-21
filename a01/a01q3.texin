@@ -29,7 +29,7 @@ Get a lower bound by underestimating $T(n)$:
 \begin{align*}
 T(n) &= n \sum_{i = 1}^{n} i^3\\
 	&\ge n \sum_{i = \frac{n}{2}}^{n} \big( \frac{n}{2} \big)^3
-		&\text{must be greater than the upper of the summation}\\
+		&\text{must be greater than the upper half of the summation}\\
 	&\ge \frac{n^4}{8} \sum_{i = \frac{n}{2}}^{n} 1\\
 	&\ge \frac{n^4}{8} \times \frac{n}{2}\\
 	&\in \Omega(n^5)
@@ -37,9 +37,9 @@ T(n) &= n \sum_{i = 1}^{n} i^3\\
 Therefore, $T(n) \in \Theta(n^5)$.
 
 \item
-If I am not blind, the if/else statements are within the {\bf for} loop. Let's start with a claim, and then analyze the running time.
+If I am not blind, the if/else statements are under the {\bf for} loop. Let's start with a claim, and then analyze the running time.
 \begin{claim}
-After the first iteration of the {\bf for} loop, $i \le 1$.
+After the first iteration of the {\bf while} loop, $i \le 1$.
 \end{claim}
 \begin{proof}
 Let's prove by induction.
@@ -48,15 +48,15 @@ Let's prove by induction.
 If $i = n = 2$, then after the first iteration of the for loop, $i = i_{old}/2 = 1$.
 
 {\bf Induction Step}
-Suppose $i = n > 1$.
+Suppose $i = n > 2$.
 This means that $\frac{i}{2} > 1$.
 Consequently,
 \begin{align*}
-i - 1 \ge i - \frac{i}{2}
+i - 1 \ge \frac{i}{2} =  i - \frac{i}{2}
 \end{align*}
 This means that either $i$ is being decremented slowly by 1 each step, or it is being halved quickly.
-Now, let's {\bf underestimate} the the speed of the counter by replacing the entire {\tt if} statement by $i = i - 1$.
 Then, let $C(i)$ be the amount that is being decremented in each step within the for loop.
+Now, let's {\bf underestimate} the the speed of the counter by replacing the entire {\tt if} statement by $i = i - 1$.
 \begin{align*}
 \text{The amount which is decremented by $i$} &= \sum_{i = 1}^{n} C(i)\\
 	&\ge \sum_{i = 1}^{n} 1\\
@@ -67,7 +67,7 @@ Hence, by the end of the first iteration of the for loop, $i \le i - n = 0 \le 1
 The claims means the block that is under the while loop only run once, which means the while loop can be ignored.
 Thus, the running time is as follows.
 \begin{align*}
-T(n) &= 1 \times \sum_{j = 1}^{n} \Theta(1)\\
+T(n) &= 1 \times \sum_{j = 1}^{n} \Theta(1) & \text{1 for the while loop}\\
 	&= \Theta(n)
 \end{align*}
 Hence, if I am not blind, then the running time is linear.
@@ -81,9 +81,9 @@ The while loop runs $\lg\lg n$ times.
 \begin{proof}
 Let $k$ be the number of times that the while loop is being run.
 Notice that $\sqrt{i} = i^{1/2}$.
-This means that square-root of $n$ for $k$ times is the same as calculating the value of $n^{1/2^k}$.
+This means that repeating square-root of $n$ for $k$ times is the same as calculating the value of $n^{1/2^k}$.
 
-Consider the $k$th iteration.
+Consider the $k$-th iteration.
 The value of $i$ should be less than or equal to 2 in order to break the while loop.
 \begin{align*}
 n^{1/2^k} &\le 2\\
@@ -91,7 +91,7 @@ n^{1/2^k} &\le 2\\
 \lg n &\le 2^k\\
 \lg\lg n &\le k
 \end{align*}
-Consider the $k-1$th iteration.
+Condider the $(k-1)$-th iteration.
 The value of $i$ should be greater than 2 in order to satisfy the while loop.
 \begin{align*}
 n^{1/2^{k-1}} &> 2\\

@@ -14,7 +14,7 @@ Notice both functions are increasing functions.
 Let's rewrite $f(n)$ and $g(n)$.
 \begin{align*}
 g(n) &= \frac{1}{5}(n^2-2n)\\
-f(n) &= \frac{n^4\log n}{n + o(n)}\\
+f(n) &= \frac{n^4\log n}{n + o(n)} & \text{Notice $2 \in o(n)$}\\
 	&\ge \frac{n^4\log n}{2n}\\
 	&\ge \frac{n^3\log n}{2}\\
 	&\ge \frac{n^3}{2} 

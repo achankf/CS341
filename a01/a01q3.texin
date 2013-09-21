@@ -1,0 +1,116 @@
+\begin{enumerate}
+\item
+Rewrite the loops in terms of summations.
+This one is simple so no fancy explaination.
+\begin{align*}
+T(n) &= \sum_{i = 1}^{n} \sum_{j = 1}^{lg(n)} \sum_{k = 1}^{19} 1 \\
+	&= \sum_{i = 1}^{n} \sum_{j = 1}^{lg(n)} 19\\
+	&= 19 \sum_{i = 1}^{n} \lg(n)\\
+	&= 19\lg(n) n\\
+	&\in n\lg n
+\end{align*}
+
+\item
+Rewrite the loops in terms of summations.
+\begin{align*}
+T(n) &= \sum_{i = 1}^{n} \sum_{j = 1}^{i^3} \sum_{k = 1}^{n} 1 \\
+	&= \sum_{i = 1}^{n} \sum_{j = 1}^{i^3} n \\
+	&= n \sum_{i = 1}^{n} i^3 \\
+	&= n \sum_{i = 1}^{n} i^3 
+\end{align*}
+Get an upper bound by overestimating $T(n)$:
+\begin{align*}
+T(n) &= n \sum_{i = 1}^{n} i^3\\
+	&\le n \sum_{i = 1}^{n} n^3\\
+	&\le n \times n^4\\
+	&\in O(n^5)
+\end{align*}
+Get a lower bound by underestimating $T(n)$:
+\begin{align*}
+T(n) &= n \sum_{i = 1}^{n} i^3\\
+	&\ge n \sum_{i = \frac{n}{2}}^{n} \big( \frac{n}{2} \big)^3
+		&\text{must be greater than the upper of the summation}\\
+	&\ge \frac{n^4}{8} \sum_{i = \frac{n}{2}}^{n} 1\\
+	&\ge \frac{n^4}{8} \times \frac{n}{2}\\
+	&\in \Omega(n^5)
+\end{align*}
+Therefore, $T(n) \in \Theta(n^5)$.
+
+\item
+If I am not blind, the if/else statements are within the {\bf for} loop. Let's start with a claim, and then analyze the running time.
+\begin{claim}
+After the first iteration of the {\bf for} loop, $i \le 1$.
+\end{claim}
+\begin{proof}
+Let's prove by induction.
+
+{\bf Base Case}
+If $i = n = 2$, then after the first iteration of the for loop, $i = i_{old}/2 = 1$.
+
+{\bf Induction Step}
+Suppose $i = n > 1$.
+This means that $\frac{i}{2} > 1$.
+Consequently,
+\begin{align*}
+i - 1 \ge i - \frac{i}{2}
+\end{align*}
+This means that either $i$ is being decremented slowly by 1 each step, or it is being halved quickly.
+Now, let's {\bf underestimate} the the speed of the counter by replacing the entire {\tt if} statement by $i = i - 1$.
+Then, let $C(i)$ be the amount that is being decremented in each step within the for loop.
+\begin{align*}
+\text{The amount which is decremented by $i$} &= \sum_{i = 1}^{n} C(i)\\
+	&\ge \sum_{i = 1}^{n} 1\\
+	&\ge n
+\end{align*}
+Hence, by the end of the first iteration of the for loop, $i \le i - n = 0 \le 1$, as required.
+\end{proof}
+The claims means the block that is under the while loop only run once, which means the while loop can be ignored.
+Thus, the running time is as follows.
+\begin{align*}
+T(n) &= 1 \times \sum_{j = 1}^{n} \Theta(1)\\
+	&= \Theta(n)
+\end{align*}
+Hence, if I am not blind, then the running time is linear.
+\done
+
+\item
+Let's consider the number of times the while loop is being run.
+\begin{claim}
+The while loop runs $\lg\lg n$ times.
+\end{claim}
+\begin{proof}
+Let $k$ be the number of times that the while loop is being run.
+Notice that $\sqrt{i} = i^{1/2}$.
+This means that square-root of $n$ for $k$ times is the same as calculating the value of $n^{1/2^k}$.
+
+Consider the $k$th iteration.
+The value of $i$ should be less than or equal to 2 in order to break the while loop.
+\begin{align*}
+n^{1/2^k} &\le 2\\
+\frac{1}{2^k} \lg n &\le \lg 2\\
+\lg n &\le 2^k\\
+\lg\lg n &\le k
+\end{align*}
+Consider the $k-1$th iteration.
+The value of $i$ should be greater than 2 in order to satisfy the while loop.
+\begin{align*}
+n^{1/2^{k-1}} &> 2\\
+\lg\lg n &> k - 1\\
+\lg\lg n + 1 &> k
+\end{align*}
+Now sandwich the inequalities together.
+\begin{align*}
+\lg\lg n \le &k < \lg\lg n + 1 &\\
+\lg\lg n \le &k \le \lg\lg n &\text{since $k$ is discrete}\\
+\implies k &= \lg\lg n
+\end{align*}
+As required.
+\end{proof}
+Now for the running time of the entire code segment.
+\begin{align*}
+T(n) &= \sum_{i = 1}^{\lg\lg n} \sum_{j=1}^{n} 1\\
+	&= n \lg\lg n
+\end{align*}
+Therefore, the running time is $T(n) = n \lg\lg n$.
+\done
+\end{enumerate}

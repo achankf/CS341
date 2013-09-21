@@ -1,0 +1,42 @@
+Consider the following pseudocode.
+\begin{algorithm}
+power(base, exp)
+	if exp = 1 then // base case
+		return base
+
+	let base2 = base * base
+	let newexp = exp / 2 // can achieve O(1) with bit-shifting
+
+	if exp is odd then // can achieve O(1) with bit-masking
+		return base * power(base2, newexp)
+	else
+		return power(base2, newexp)
+\end{algorithm}
+To view the algorithm, think of $n$ as an array of stones ($base$).
+\begin{itemize}
+\item
+Two stones are being paired together and being put in a smaller bag, so that there are $\frac{n}{2}$ smaller bags.
+This is the division process.
+\item
+If there is an remaining stone, i.e. $n$ is odd, then we put it into the last bag and deal with it when recursion call returns, in the same stack.
+This is okay because real numbers are commutative.
+\item 
+Continue pairing until there is only one bag left with a value of $N_k$ (some square power of $base$, i.e. $base^{2^k}$), where $k$ is the number of times of the division process.
+\item
+Start the conquering process.
+\item
+Using the name $N_k$ of the remaining bag (some square power of $base$, i.e. $base^{2^k}$,
+start fixing the odd cases.
+That is, $N_k \times ifOdd(k-1,N_{k-1}) \times \cdots \times ifOdd(1, N_{1})$, where $ifOdd(m,N_{m})$ checks whether the $m$th resursion step is an odd case; if so return $N_m$.
+Again, each multiplication is done within its recursion stack.
+\item
+Done
+\end{itemize}
+
+There is one recursion call and 2 multiplications ($base \times base$ and $base \times power(..,..)$ in the odd case).
+Thus, the running time is the following.
+\begin{align*}
+T(n) &= T(\frac{n}{2}) + 2
+\end{align*}
+By the Master Theorem, $a = 1, b = 2, y = 0, x = \lg 1 = 0$, so $x = y$, so $T(n) = \Theta(n^0\log n) = \Theta(\log n)$, as required.
+\done

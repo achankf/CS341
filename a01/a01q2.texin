@@ -1,0 +1,30 @@
+First, rewrite the equalities for $f_1(n)$ and $f_2(n)$.
+\begin{align*}
+&c_1 g(n) \le f_1(n) \le c_2 g(n) &\text{for $n > n_0$}\\
+&c_3 g(n) \le f_2(n) \le c_4 g(n) &\text{for $n > n_1$}
+\end{align*}
+\begin{enumerate}
+\item
+True.
+For $n > max(n_0,n_1)$,
+\begin{align*}
+& c_1 g(n) + c_3 g(n) \le f_1(n) + f_2(n) \le c_2 g(n) + c_4 g(n)\\
+& (c_1 + c_3) g(n) \le f_1(n) + f_2(n) \le (c_2 + c_4) g(n)
+\end{align*}
+Hence, by definition $f_1(n) + f_2(n) \in \Theta(g(n))$.
+\done
+
+\item
+False.
+Consider $f_1(n) = 2n \in \Theta(n)$ and $f_2(n) = n \in \Theta(n)$.
+Then $f_1(n) - f_2(n) = n \not\in O(1)$.
+Hence, the statement is false.
+\done
+
+\item
+False.
+Notice the question states that $f_2(n) \ge 0$.
+Let $f_1(n) = 1 \in \Theta(1)$ and $f_2(n) = 0 \in \Theta(1)$.
+But $f_1(n) / f_2(n) = 1/0$, which is undefined.
+Hence, it cannot be described by $\Theta(1)$.
+\end{enumerate}

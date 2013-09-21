@@ -32,8 +32,6 @@ $f(n) \in O(g(n))$ & No
 
 \item
 Notice both functions are increasing functions.
-Assume $\log$ is in base $b$.
-Consider the exponent of $f(n)$.
 \begin{align*}
 \lim_{n \to +\infty} \frac{f(n)}{g(n)} &= \lim_{n \to +\infty} \frac{1}{n^\frac{1}{\log n}}\\
 	&= 1

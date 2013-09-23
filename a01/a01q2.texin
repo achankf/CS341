@@ -27,4 +27,5 @@ Notice the question states that $f_2(n) \ge 0$.
 Let $f_1(n) = 1 \in \Theta(1)$ and $f_2(n) = 0 \in \Theta(1)$.
 But $f_1(n) / f_2(n) = 1/0$, which is undefined.
 Hence, it cannot be described by $\Theta(1)$.
+\done
 \end{enumerate}

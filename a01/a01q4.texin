@@ -29,16 +29,16 @@ That is,
 power(base, exp) &= N_k \times ifOdd(k-1,N_{k-1}) \times \cdots \times ifOdd(1, N_{1})
 \end{align*}
 where $ifOdd(m,N_{m})$ checks whether the $m$-th resursion step is an odd case; if so return $N_m$ (the value of $base$ at the $m$-th recursion call).
-Again, each multiplication is done within its recursion stack.
+Again, each multiplication is done within its recursion stack -- no extra combining process.
 This is the conquering process.
 \item
 Done
 \end{itemize}
 
-There is one recursion call and 2 multiplications ($base \times base$ and $base \times power(..,..)$ in the odd case).
-Thus, the running time is the following.
+Notice here the concern is how many pairs (analogy above) the algorithm has processed, but not the number of multiplications.
+Thus, the running time is the number of pairs can be formed, which is equivalent to the reverse of splitting an array by half -- like bottom-up vs. top-down.
 \begin{align*}
-T(n) &= T(\frac{n}{2}) + 2
+T(n) &= k = T(\frac{n}{2})\\
+	&= \Theta(log(n))
 \end{align*}
-By the Master Theorem, $a = 1, b = 2, y = 0, x = \lg 1 = 0$, so $x = y$, so $T(n) = \Theta(n^0\log n) = \Theta(\log n)$, as required.
 \done

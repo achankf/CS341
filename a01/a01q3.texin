@@ -7,7 +7,7 @@ T(n) &= \sum_{i = 1}^{n} \sum_{j = 1}^{lg(n)} \sum_{k = 1}^{19} 1 \\
 	&= \sum_{i = 1}^{n} \sum_{j = 1}^{lg(n)} 19\\
 	&= 19 \sum_{i = 1}^{n} \lg(n)\\
 	&= 19\lg(n) n\\
-	&\in n\lg n
+	&\in \Theta(n\lg n)
 \end{align*}
 
 \item

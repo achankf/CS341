@@ -13,11 +13,11 @@ By definition, $f(n) + n\log n \in \Theta(g(n) + n\log n)$.
 Notice both functions are increasing functions.
 Let's rewrite $f(n)$ and $g(n)$.
 \begin{align*}
-g(n) &= \frac{1}{5}(n^2-2n)\\
 f(n) &= \frac{n^4\log n}{n + o(n)} & \text{Notice $2 \in o(n)$}\\
 	&\ge \frac{n^4\log n}{2n}\\
 	&\ge \frac{n^3\log n}{2}\\
-	&\ge \frac{n^3}{2} 
+	&\ge \frac{n^3}{2} \implies f(n) \in \Omega(n^3)\\
+g(n) &= \frac{1}{5}(n^2-2n) \in \Theta(n^2)
 \end{align*}
 Since $n^3 \in \omega(n^2)$, therefore $f(n) \in \omega(g(n))$.
 Consequently,

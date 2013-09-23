@@ -1,4 +1,4 @@
-Consider the following pseudocode.
+First assume that the result will fit in a CPU word, so that each multiplication costs $\Theta(1)$.
 \begin{algorithm}
 power(base, exp)
 	if exp = 1 then // base case
@@ -12,33 +12,29 @@ power(base, exp)
 	else
 		return power(base2, newexp)
 \end{algorithm}
-To view the algorithm, think of $n$ as an array of stones ($base$).
+To view the algorithm, think of the it as the bottom-up construction of a path from a specialized, complete binary tree, $B$.
 \begin{itemize}
 \item
-Two stones are being paired together and being put in a bag, so that there are $\frac{n}{2}$ bags.
-This is the division process.
+Each node in $B$ contains $N_i = base^{2^i}$, where $i$ is the level from the buttom (i.e. leaf level is zero; notice in the algorithm the base case is $exp = 1$).
 \item
-If there is an remaining stone, i.e. $n$ is odd, then we put it into the last bag and deal with it when recursion call returns, in the same stack.
-This is okay because real numbers are commutative.
-\item 
-Continue pairing until there is only one bag left with a value of $N_k$ (some square power of the original $base$, i.e. $base_{original}^{2^k}$), where $k$ is the number of times of the division process happened.
-\item
-Start fixing the odd cases.
-That is, 
-\begin{align*}
-power(base, exp) &= N_k \times ifOdd(k-1,N_{k-1}) \times \cdots \times ifOdd(1, N_{1})
-\end{align*}
-where $ifOdd(m,N_{m})$ checks whether the $m$-th resursion step is an odd case; if so return $N_m$ (the value of $base$ at the $m$-th recursion call).
-Again, each multiplication is done within its recursion stack -- no extra combining process.
-This is the conquering process.
-\item
-Done
+Each node have an extra variable that decides whether $exp_i$ is odd.
 \end{itemize}
 
-Notice here the concern is how many pairs (analogy above) the algorithm has processed, but not the number of multiplications.
-Thus, the running time is the number of pairs can be formed, which is equivalent to the reverse of splitting an array by half -- like bottom-up vs. top-down.
+Notice nodes in the leaf level contains $N_0 = base$, and the product of the bottom level is $power(base, exp)$, as described in the question and cost $\Theta(n)$.
+
+The quicker method is to construct a path by taking, say, the right-most node.
+When the recursion calls ends, the stack starts to pop and the algorithm basically calculates the following.
 \begin{align*}
-T(n) &= k = T(\frac{n}{2})\\
-	&= \Theta(log(n))
+power(base, exp) &= N_k \times \prod_{j = 1}^{k}ifOdd(k-j,N_{k-j})
+\end{align*}
+where $k = height(B)$, and $ifOdd(m,N_{m})$ checks whether the $m$-th resursion step is an odd case -- if so return $N_m$; otherwise return 1.
+
+{\bf Notice the algorithm only builds one path of $B$ from buttom-up, not the entire tree.}
+Also, the running time depends on $exp$, which is being halved for each recursion call -- this is the division process.
+The conquering process is when the recursion returns and fix the odd cases.
+
+Thus,
+\begin{align*}
+T(n) \in \Theta(height(B)) = \Theta(\log n)
 \end{align*}
 \done

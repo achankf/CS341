@@ -111,6 +111,6 @@ Now for the running time of the entire code segment.
 T(n) &= \lg\lg n \sum_{j=1}^{n} 1\\
 	&= n \lg\lg n
 \end{align*}
-Therefore, the running time is $T(n) = n \lg\lg n$.
+Therefore, the running time is $T(n) = \Theta(n \lg\lg n)$.
 \done
 \end{enumerate}

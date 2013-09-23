@@ -5,7 +5,7 @@ power(base, exp)
 		return base
 
 	let base2 = base * base
-	let newexp = exp / 2 // can achieve O(1) with bit-shifting
+	let newexp = exp / 2 // can achieve O(1) with bit-shifting; value is truncated
 
 	if exp is odd then // can achieve O(1) with bit-masking
 		return base * power(base2, newexp)
@@ -24,7 +24,11 @@ This is okay because real numbers are commutative.
 Continue pairing until there is only one bag left with a value of $N_k$ (some square power of the original $base$, i.e. $base_{original}^{2^k}$), where $k$ is the number of times of the division process happened.
 \item
 Start fixing the odd cases.
-That is, $N_k \times ifOdd(k-1,N_{k-1}) \times \cdots \times ifOdd(1, N_{1})$, where $ifOdd(m,N_{m})$ checks whether the $m$-th resursion step is an odd case; if so return $N_m$.
+That is, 
+\begin{align*}
+power(base, exp) &= N_k \times ifOdd(k-1,N_{k-1}) \times \cdots \times ifOdd(1, N_{1})
+\end{align*}
+where $ifOdd(m,N_{m})$ checks whether the $m$-th resursion step is an odd case; if so return $N_m$ (the value of $base$ at the $m$-th recursion call).
 Again, each multiplication is done within its recursion stack.
 This is the conquering process.
 \item

@@ -1,10 +1,13 @@
 \begin{enumerate}
 \item
-First notice that $n\log n > 0$ when $n > 1$.
+First $f(x)$ and $n\log n$ and increasing functions. Also, $n\log n > 0$ when $n > 1$.
+For $c_1 > 0, c_2 > 0$:
 \begin{align*}
 f(n) = \Theta(g(n)) &\implies c_1 g(n) \le f(n) \le c_2 g(n), \text{ for $n > n_0 > 0$}\\
 &\implies c_1 g(n) + n\log n \le f(n) + n \log n \le c_2 g(n) + n\log n\\
-&\text{when $n > n_0 + 1$ (the plus one makes up for the log)}
+&\text{when $n > n_0 + 1$ (the plus one makes up for the log)}\\
+&\implies c_3(g(n) + n\log n) \le f(n) + n \log n \le c_4(g(n) + n\log n)\\
+&\text{when $c_3 = min(1, c_1)$ and $c_4 = max(1, c_4)$}
 \end{align*}
 By definition, $f(n) + n\log n \in \Theta(g(n) + n\log n)$.
 \done

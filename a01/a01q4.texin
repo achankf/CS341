@@ -1,4 +1,4 @@
-First assume that the result will fit in a CPU word, so that each multiplication costs $\Theta(1)$.
+First start with pseudocodes.
 \begin{algorithm}
 power(base, exp)
 	if exp = 1 then // base case
@@ -20,20 +20,16 @@ Each node in $B$ contains $N_i = base^{2^i}$, where $i$ is the level from the bu
 Each node have an extra variable that decides whether $exp_i$ is odd.
 \end{itemize}
 
-Notice nodes in the leaf level contains $N_0 = base$, and the product of the bottom level is $power(base, exp)$, as described in the question and cost $\Theta(n)$.
+Notice nodes in the leaf level contains $N_0 = base$, and the product of the bottom level (times an extra $N_0$ if $exp$ is odd) is $power(base, exp)$, as described in the question and cost $\Theta(n)$.
 
 The quicker method is to construct a path by taking, say, the right-most node.
-When the recursion calls ends, the stack starts to pop and the algorithm basically calculates the following.
-\begin{align*}
-power(base, exp) &= N_k \times \prod_{j = 1}^{k}ifOdd(k-j,N_{k-j})
-\end{align*}
-where $k = height(B)$, and $ifOdd(m,N_{m})$ checks whether the $m$-th resursion step is an odd case -- if so return $N_m$; otherwise return 1.
+When the recursion calls ends it starts with $N_k$, then the stack starts to pop and has to multiply $N_i$ for the odd cases (every level in $B$ has a power of 2 number of nodes, hence the extra node for odd cases is ``missing", therefore needs to be fixed).
 
 {\bf Notice the algorithm only builds one path of $B$ from buttom-up, not the entire tree.}
-Also, the running time depends on $exp$, which is being halved for each recursion call -- this is the division process.
-The conquering process is when the recursion returns and fix the odd cases.
+Also, the running time depends on $exp$, which is being halved for each recursion call (aka the path from the root of $B$ to the bottom) -- this is the division process.
+There is no need to merge, since the odd-case fix is part of the recursion stack, so the conquering process is completed during the division process.
 
-Thus,
+Thus, the running time depends only on the height of $B$.
 \begin{align*}
 T(n) \in \Theta(height(B)) = \Theta(\log n)
 \end{align*}

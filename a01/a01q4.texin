@@ -21,8 +21,10 @@ Each node have an extra variable that decides whether $exp_i$ is odd.
 \end{itemize}
 
 Notice nodes in the leaf level contains $N_0 = base$, and the product of the bottom level (times an extra $N_0$ if $exp$ is odd) is $power(base, exp)$, as described in the question and cost $\Theta(n)$.
+Similarly for other levels.
 
-The quicker method is to construct a path by taking, say, the right-most node.
+The quicker method is to construct a path by taking, say, the right-most nodes.
+Notice the value of all internal nodes can be form by multiplying its 2 children.
 When the recursion calls ends it starts with $N_k$, then the stack starts to pop and has to multiply $N_i$ for the odd cases (every level in $B$ has a power of 2 number of nodes, hence the extra node for odd cases is ``missing", therefore needs to be fixed).
 
 {\bf Notice the algorithm only builds one path of $B$ from buttom-up, not the entire tree.}

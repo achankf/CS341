@@ -15,7 +15,6 @@ Rewrite the loops in terms of summations.
 \begin{align*}
 T(n) &= \sum_{i = 1}^{n} \sum_{j = 1}^{i^3} \sum_{k = 1}^{n} 1 \\
 	&= \sum_{i = 1}^{n} \sum_{j = 1}^{i^3} n \\
-	&= n \sum_{i = 1}^{n} i^3 \\
 	&= n \sum_{i = 1}^{n} i^3 
 \end{align*}
 Get an upper bound by overestimating $T(n)$:

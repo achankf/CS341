@@ -9,6 +9,7 @@ T(n) &= \sum_{i = 1}^{n} \sum_{j = 1}^{lg(n)} \sum_{k = 1}^{19} 1 \\
 	&= 19\lg(n) n\\
 	&\in \Theta(n\lg n)
 \end{align*}
+\done
 
 \item
 Rewrite the loops in terms of summations.
@@ -34,6 +35,7 @@ T(n) &= n \sum_{i = 1}^{n} i^3\\
 	&\in \Omega(n^5)
 \end{align*}
 Therefore, $T(n) \in \Theta(n^5)$.
+\done
 
 \item
 If I am not blind, the if/else statements are under the {\bf for} loop. Let's start with a claim, and then analyze the running time.

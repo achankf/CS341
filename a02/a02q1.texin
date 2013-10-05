@@ -1,0 +1,13 @@
+The question lied because some transitions takes multiple steps.
+\begin{itemize}
+\item {\bf Step 1} Factor out $n^{\log_b a - \epsilon}$, leaving $a^j \big( \frac{1}{b^j} \big) ^{\log_b a - \epsilon}$ in the summation.
+\item Swap the exponent in $\big( \frac{1}{b^j} \big)^{\log_b a - \epsilon}$ and expand $a^j$, resulting in $\big( \frac{a}{b^{\log_b a - \epsilon}} \big) ^j$
+\item Separate the exponent ($-\epsilon$) from $b$, resulting in $\big( \frac{a b^\epsilon}{b^{\log_b a}} \big) ^j$. Step 1 complete.
+\item {\bf Step 2} Use the log formula $b^{\log_b a} = a^{\log_b b} = a$, and then divide out the $a$.
+\item {\bf Step 3} Close the summation using the formula for geometric series.
+\item {\bf Step 4} Finally, rewrite the term $b^{\epsilon \log_b a}$ using log properties.
+\begin{align*}
+b^{\epsilon \log_b n} = b^{\log_b n^\epsilon} = n^{\epsilon^{\log_b b}} =  n^\epsilon
+\end{align*}
+\end{itemize}
+\done

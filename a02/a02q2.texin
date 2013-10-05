@@ -1,0 +1,38 @@
+First prove the first part of the question.
+\begin{lemma}
+$\lg n$ is not polynomial bounded.
+\end{lemma}
+\begin{proof}
+Equivalently, it is sufficient to prove that $\lg n = \frac{\ln n}{\ln 2}\in o(n)$.
+\begin{align*}
+\lim_{n \to \infty} \frac{\lg n}{n} &= \lim_{n \to \infty} \frac{1}{\ln 2} \frac{\ln n}{n}\\
+	&= \lim_{n \to \infty} \frac{1}{\ln 2} \frac{\frac{1}{n}}{1} \\
+	&= 0
+\end{align*}
+In other words, $\lg n \in o(n)$.
+Consequently, $\lg n \not\in \Theta(n)$, $\lg n \not\in \Theta(n^2)$, $\cdots$, $\lg n \not\in \Theta(n^x)$, for $x > 0$.
+\end{proof}
+Now prove that the master theorem is not applicable for $T(n)$.
+Given $f(n) = n^{2-\lg n}, a = 4, b = 2, n^{\log_b a} = n^2$.
+\begin{align*}
+\lg n \in o(n^\epsilon) &\implies \lg n < cn^\epsilon & \text{for all $c > 0, n>N$}\\
+	&\implies \frac{n^2}{cn^\epsilon} < \frac{n^2}{\lg n} \\
+	&\implies \frac{1}{c}n^{2-\epsilon} < n^{2 - \lg n}\\
+	&\implies n^{2- \lg n} \in \omega(n^{2-\epsilon}) \\
+	&\implies f(n) \not\in O(n^{\log_b a-\epsilon})
+\end{align*}
+Hence, the first condition is not satisfied.
+The second condition is not satified because $n^{2-\lg n} \in o(n^2)$; in other words, $f(n) \not\in \Theta(n^{\log_b a})$.
+Similarly,
+\begin{align*}
+\lg n \in o(n^\epsilon) &\implies \lg n < cn^\epsilon & \text{for all $c > 0, n>N$}\\
+	&\implies -\lg n < \lg n < cn^\epsilon & \text{since $\lg n$ is positive for the above condition}\\
+	&\implies n^{-\lg n} < cn^\epsilon \\
+	&\implies n^2n^{-\lg n} < cn^2n^{\epsilon} \\
+	&\implies n^{2-\lg n} < cn^{2 + \epsilon} \\
+	&\implies n^{2- \lg n} \in o(n^{\log_b a+\epsilon}) \\
+	&\implies f(n) \not\in \Omega(n^{\log_b a+\epsilon}) 
+\end{align*}
+Hence, the third condition is not satisfied.
+Therefore, the master theorem is not applicable for $T(n)$.
+\done

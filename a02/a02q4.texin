@@ -9,7 +9,7 @@ The worst case lies in selecting the bigger partition all the time.
 {\bf The clever thing about MoM is that it partitions the array in fix proportions.}
 Using similar arguments as the course textbook, for an n-element array we can arrange the elements into a $\frac{n}{g}$ (the number of $g$-element groups) by $g$ rectangle $R$.
 
-Each group (top to bottom) of fixed sized $g$ is sorted, which is $O(1)$.
+Each group (top to bottom) of fixed sized $g$ is sorted; $O(1)$ for each group; $O(n)$ in total.
 
 The arrangements of MoMs (left to right) ensures that the pivot is in the centre of $R$; one side is larger, the other side is smaller; $O(n)$.
 

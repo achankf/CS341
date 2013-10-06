@@ -23,7 +23,7 @@ Now, the question is: given $A[j+1-k, j+1+k]$ is sorted, does $A[0,j+1]$ remain 
 
 Let $node$ be the $(j+1)$-th element before sorting.
 Suppose, by way of contradiction, $A[0,j+1]$ is not sorted.
-This means that $node$'s true position is in $A[0,j-k-1] \cup A[j+k+1,n]$
+This means that $node$'s true position is in $A[0,j-k] \cup A[j+k+2,n]$
 because {\tt insertionSort} cannot touch these partitions due to the $2k$ limit.
 However, that means $node$'s correct position is at least $k+1$ away from $j+1$, which is a contradiction.
 
@@ -35,4 +35,5 @@ T(n) &\le T(n-1) + c & \text{$c = (2k)^2$ for insertion sort on at most $2k$ ele
 	&\le cn
 \end{align*}
 Therefore, the upper bound is $T(n) \in O(n)$.
+Together with the lower bound $T(n) \in \Omega(n)$ (everything needs to be read at least once), $T(n) \in \Theta(n)$.
 \done

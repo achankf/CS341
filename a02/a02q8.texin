@@ -1,0 +1,91 @@
+\begin{enumerate}
+\item
+First, let's recall the {\tt merge} function in merge sort.
+\begin{algorithm}
+merge A1[0,m] A2[0,n]
+	let ret = allocate an array of size n*m
+	let idxA1 = idxA2 = 0 // the next element to be pushed into ret
+	let idxRet = 0 // the current index for ret
+
+	while true
+		if idxA1 > m then
+			concatentate A2[idxA2, n] to ret
+			return ret
+		else if idxA2 > n then
+			concatentate A1[idxA1, m] to ret
+			return ret
+
+		if A1[idxA1] < A2[idxA2] then
+			ret[idxRet] = A1[idxA1]
+		else
+			ret[idxRet] = A1[idxA2]
+
+		idxRet++
+	// will not reach
+\end{algorithm}
+Every iteration a character is pushed into the returning array; hence, the running is $\Theta(n+m)$.
+
+Now, consider a function that merge two arrays at a time from the list of m arrays.
+\begin{algorithm}
+mergeArrays (A1, A2, ... , Am)
+	if m = 1 then return Am // only one array remains -- done
+
+	let next = allocate a new list of arrays
+	for i from 0 to m/2
+		let A = merge the (i+1)-th array and the (m-i)-th array
+		push A into next
+	mergeArrays next
+\end{algorithm}
+The running time of {\tt mergeArrays} is
+\begin{align*}
+T(mn) &=
+\begin{cases}
+	n & \text{when $m = 1$}\\
+	T(\frac{m}{2}) + \frac{m}{2}\Theta(n+n)+ \Theta(m) & \text{otherwise}
+\end{cases}\\
+	&= T(\frac{m}{2}) + \Theta(nm)\\
+	&= \Theta(mn\lg m)
+\end{align*}
+$\Theta(n+n)$ for merging two arrays of size n; $\Theta(m)$ for pushing the merged results (pointer) into the list and allocating for the return array.
+Therefore, the running time for {\tt mergeArrays} is $\Theta(mn\lg m)$.
+
+\item
+The min-heap fits the question's descriptions.
+Consider the following {\tt heapMerge}, where the min-heap keeps track of the minimum element in each list:
+\begin{algorithm}
+heapMerge (A1, A2, ... Am)
+	let mheap = allocate a min heap 
+	let ret = returning array
+
+	for i from 1 to m
+		push (first element of Ai, i) into the storage of mheap without maintaining the heap order // O(m)
+
+	heapify mheap // O(m)
+
+	for i from 1 to mn
+		let pair(element, k) = pop min from mheap // O(lg m)
+		ret[i] = element
+		push the first element from Ak if available
+		
+	return ret
+\end{algorithm}
+The running is
+\begin{align*}
+T(mn) &= \Theta(m) + \sum_{i = 0}^{mn} \lg m & \text{$\Theta(m)$ for heapify}\\
+	&= \Theta(m) + mn\lg m
+\end{align*}
+Therefore the running time for {\tt heapMerge} is $\Theta(mn \lg m)$.
+\done
+
+\item
+Divide-and-conquer is perfered when the number of list ($m$) is large.
+The reason is that the space of the auxilliary list keeps shrinking by half each time, so the memory can be released to the OS as soon as possible.
+Since an efficient heap is based on an array, so the heap will always have $m$ nodes.
+
+On the other hand, min-heap should be used when each array has a very large number of elements ($n$).
+The reason is that min-heap use constant amount of space with and manipulate on a fix-size, $mn$-element array.
+Whereas the divide-and-conquer approach constantly create new arrays for each intermediate step -- this has an overhead.
+
+I think {\tt heapMerge} should be use all the time for merging arrays, because it does not need to allocate storage for intermediate arrays.
+Perhaps divide-and-conquer would be more feasible if we were to merge linked list.
+\end{enumerate}

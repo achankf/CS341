@@ -1,0 +1,59 @@
+There are two usage of MoM  in selection:
+\begin{itemize}
+\item
+Find a {\bf pivot} for the next step and partition the array into 2 halves by recursively taking the MoM of each of the $\frac{n}{g}$ groups, which takes $\Theta(T(\frac{n}{g}))$, where $g$ is the number of elements in each group.
+\item
+With the {\bf pivot} above, decide on which of 2 partition to recurse on.
+The worst case lies in selecting the bigger partition all the time.
+\end{itemize}
+{\bf The clever thing about MoM is that it partitions the array in fix proportions.}
+Using similar arguments as the course textbook, for an n-element array we can arrange the elements into a $\frac{n}{g}$ (the number of $g$-element groups) by $g$ rectangle $R$.
+
+Each group (top to bottom) of fixed sized $g$ is sorted, which is $O(1)$.
+
+The arrangements of MoMs (left to right) ensures that the pivot is in the centre of $R$; one side is larger, the other side is smaller; $O(n)$.
+
+{\bf Hence, it is possible to split $R$ roughly into 4 sub-rectangles, and the best case is to recurse on one of them; consequently, the worst case is to recurse on 3 of the 4 sub-rectangles.} 
+The rest is about geometry -- figuring the dimension of the best case sub-rectangle.
+
+For $g = 7$, the dimension of the best case's sub-rectangle is
+\begin{align*}
+\text{Best Case Dimension} &= length \times width \\
+	&\ge \frac{1}{2}\frac{n}{7} \times 4 & \text{The median row is the fourth row} \\
+	&= \frac{4n}{14} \\
+\implies 
+\text{Worst Case Dimension} &\le n - \frac{4n}{14} \\
+	&= \frac{10n}{14}
+\end{align*}
+Hence, the recurrence is
+\begin{equation*}
+ T(x) \le
+  \begin{cases}
+   \Theta(1) & \text{if } n \ge 7 \\
+   T(\frac{n}{7}) + T(\frac{10n}{14}) + O(n) & \text{otherwise }
+  \end{cases}
+\end{equation*}
+Based on summing the proportions (parameters for $T(...)$), groups of 7 ($\frac{n}{7} + \frac{10n}{14} = \frac{12n}{14}$) seems to recurse even less than group of 5 ($\frac{n}{5} + \frac{7n}{10} = \frac{9n}{10}$).
+However, we know that group of 5 is $O(n)$ and selection has a lower bound of $\Omega(n)$ (you cannot decide a median until you read everything in the array).
+Thus, I believe groups of 7 should be asymptotically similar to groups of 5.
+
+For $g = 3$, the dimension of the best case's sub-rectangle is
+\begin{align*}
+\text{Best Case Dimension} &= length \times width \\
+	&\ge \frac{1}{2}\frac{n}{3} \times 2 & \text{The median row is the second row} \\
+	&= \frac{n}{3} \\
+\implies 
+\text{Worst Case Dimension} &\le n - \frac{n}{3} \\
+	&= \frac{2n}{3}
+\end{align*}
+Hence, the recurrence is
+\begin{equation*}
+ T(x) \le
+  \begin{cases}
+   \Theta(1) & \text{if } n \ge 3 \\
+   T(\frac{n}{3}) + T(\frac{2n}{3}) + O(n) & \text{otherwise }
+  \end{cases}
+\end{equation*}
+Unlike groups of 5, where the recursive splits add up to $\frac{n}{5} + \frac{7n}{10} = \frac{9n}{10}$, the groups of 3 splits add up to $\frac{n}{3} + \frac{2n}{3} = n$, so no work seems to be skipped. 
+Hence, I think groups of 3 is asymptotically more costly than groups of 5.
+\done

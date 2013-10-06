@@ -1,0 +1,38 @@
+Consider the algorithm {\tt sort}.
+\begin{algorithm}
+sort(A[0..n], k)
+	for i = 0 to n
+		insertionSort(min(0, i - k), min(n, n+k)) // sort 2k elements
+\end{algorithm}
+\begin{claim}
+The {\tt sort} algorithm is correct.
+\end{claim}
+\begin{proof}
+Let's prove the claim by induction. 
+
+{\bf Base Case} If $A$ only has 1 element, then it is sorted.
+
+{\bf Induction Step} Assume that the partition $A[0,j], 0 \le j \le n$ is being sorted.
+Notice that each element in $A[0,j]$ is not necessarily in sorted order for $A[0,n]$.
+
+The point is to not care about the partition after $j+1$ (i.e. $A[j+1, n]$), but instead about how the $(j+1)$-th element affect the parition before it (i.e. $A[0,j])$.
+
+Observe that sorting the $(j+1)$-th element is like inserting it into the partition $A[0,j]$.
+Then, {\tt insertionSort} makes sure that the partition $A[j+1-k,j+1+k]$ is sorted.
+Now, the question is: given $A[j+1-k, j+1+k]$ is sorted, does $A[0,j+1]$ remain sorted?
+
+Let $node$ be the $(j+1)$-th element before sorting.
+Suppose, by way of contradiction, $A[0,j+1]$ is not sorted.
+This means that $node$'s true position is in $A[0,j-k-1] \cup A[j+k+1,n]$
+because {\tt insertionSort} cannot touch these partitions due to the $2k$ limit.
+However, that means $node$'s correct position is at least $k+1$ away from $j+1$, which is a contradiction.
+
+Hence, $A[0,j+1]$ remain sorted. Therefore, by induction, the claim holds.
+\end{proof}
+Now, the easy part:
+\begin{align*}
+T(n) &\le T(n-1) + c & \text{$c = (2k)^2$ for insertion sort on at most $2k$ elements}\\
+	&\le cn
+\end{align*}
+Therefore, the upper bound is $T(n) \in O(n)$.
+\done

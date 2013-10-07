@@ -31,7 +31,7 @@ Hence, $A[0,j+1]$ remain sorted. Therefore, by induction, the claim holds.
 \end{proof}
 Now, the easy part:
 \begin{align*}
-T(n) &\le T(n-1) + c & \text{$c = (2k)^2$ for insertion sort on at most $2k$ elements}\\
+T(n) &\le T(n-1) + c & \text{$c = (2k)^2$ for insertion sort on at most $2k$ elements (constant)}\\
 	&\le cn
 \end{align*}
 Therefore, the upper bound is $T(n) \in O(n)$.

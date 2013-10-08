@@ -28,16 +28,17 @@ It is the right-most path because it recurses the least ($\frac{n}{8}$).
 This means $k = \log_8 n$.
 Consequently, $T(n) \in \Omega(n^{\log_8 3})$.
 
-Since the true running time is sandwitched between $n^{0.5}$ and $n^{1.6}$, my guess is that $T(n)$ is linear.
+Since the true running time is sandwitched between $n^{0.5}$ and $n^{1.6}$, my guess is that $T(n) \in O(n)$.
 
 Let $c$ be some constants.
 Now check:
 \begin{align*}
-T(2) &= T(1) + 1 = 2 & \text{1 is for counting} \\
-T(4) &= T(2) + T(1) + 1 = 4\\
-T(8) &= T(4) + T(2) + T(1) + 1 = 8 & \text{base case okay}\\
+T(2) &= T(1) = 1 \le 2& \text{1 is for counting} \\
+T(4) &= T(2) + T(1) = 2 \le 4\\
+T(8) &= T(4) + T(2) + T(1) = 4 \le 8 & \text{base case okay}\\
 T(n) &= c(\frac{n}{2}) + c(\frac{n}{4}) + c(\frac{n}{8}) + 1\\
-	&= \frac{7}{8}cn + O(1)
+	&= \frac{7}{8}cn + O(1)\\
+	&\le cn
 \end{align*}
-Therefore, $T(n) \in \Theta(n)$.
+Therefore, by induction $T(n) \in O(n)$.
 \done

@@ -33,9 +33,23 @@ Hence, the recurrence is
    T(\frac{n}{7}) + T(\frac{10n}{14}) + O(n) & \text{otherwise }
   \end{cases}
 \end{equation*}
-Based on summing the proportions (parameters for $T(...)$), groups of 7 ($\frac{n}{7} + \frac{10n}{14} = \frac{12n}{14}$) seems to recurse even less than group of 5 ($\frac{n}{5} + \frac{7n}{10} = \frac{9n}{10}$).
-However, we know that group of 5 is $O(n)$ and selection has a lower bound of $\Omega(n)$ (you cannot decide a median until you read everything in the array).
-Thus, I believe groups of 7 should be asymptotically similar to groups of 5.
+Notice if the recursion just run the heavyweight part ($T(\frac{10n}{14})$), suppose $k$ is the number of steps (overestimates).
+\begin{align*}
+T(\frac{10}{14}^k n) &= T(1) \\
+\implies \frac{10}{14}^k n &= 1 \\
+k &= \log_{\frac{14}{10}} n \\
+	&= \Theta(\log n)
+\end{align*}
+So, group of 7 will run at most $\Theta(logn)$ steps.
+Then, consider the estimation of the cost of each recursive call.
+Let $c$ be a constant.
+The first recursive call recurse on a size of $c(\frac{n}{7} + \frac{10n}{14}) = cn\frac{12}{14}$, the next recursive call is $c\big((\frac{n}{49} + \frac{10n}{49}) + (\frac{10n}{49} + \frac{100n}{196})\big) = cn(\frac{12}{14})^2$ (I guess you see the pattern).
+So my estimate cost is
+\begin{align*}
+cn\frac{12}{14} + cn(\frac{12}{14})^2 + \cdots + cn(\frac{12}{14})^k &\le cn \sum_{i=1}^{\infty} (\frac{12}{14})^i \\
+	&\le c_1n & \text{infinite geometric series $r < 1$}
+\end{align*}
+Therefore, groups of 7 is linear, same as groups of 5.
 
 For $g = 3$, the dimension of the best case's sub-rectangle is
 \begin{align*}
@@ -54,6 +68,10 @@ Hence, the recurrence is
    T(\frac{n}{3}) + T(\frac{2n}{3}) + O(n) & \text{otherwise }
   \end{cases}
 \end{equation*}
-Unlike groups of 5, where the recursive splits add up to $\frac{n}{5} + \frac{7n}{10} = \frac{9n}{10}$, the groups of 3 splits add up to $\frac{n}{3} + \frac{2n}{3} = n$, so no work seems to be skipped. 
-Hence, I think groups of 3 is asymptotically more costly than groups of 5.
+Notice if the recursion just run the lightweight part ($T(\frac{n}{3})$), then $T(n)$ will take at least $\log_3 n$ steps. 
+Then, consider the estimation of the cost of each recursive call.
+Let $c$ be a constant.
+The first recursive call recurse on a size of $c(\frac{n}{3} + \frac{2n}{3}) = cn$, the next recursive call is $c\big((\frac{n}{9} + \frac{2n}{9}) + (\frac{2n}{9} + \frac{4n}{9})\big) = cn^2$ (I guess you see the pattern).
+So my estimate cost is $cn + cn^2 + \cdots + cn^k \ge cn \log_3 n $.
+Hence, $T(n) \in \Omega(n\log n)$ which is more costly than groups of 5.
 \done

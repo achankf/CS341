@@ -1,4 +1,4 @@
-First the guess part.
+First look into a few recursive steps.
 \begin{align*}
 T(n) &= 4T(\frac{n}{2}) + \frac{n^2}{\lg n} \\
 T(n) &= 4\bigg(4T(\frac{n}{2^2}) + \frac{(\frac{n}{2})^2}{\lg \frac{n}{2}} \bigg) + \frac{n^2}{\lg n} \\
@@ -9,7 +9,7 @@ T(n) &= 4^2T(\frac{n}{2^2}) + \frac{n^2}{\lg \frac{n}{2}} + \frac{n^2}{\lg n} \\
 Since there are $k$ steps in total, then $T(\frac{n}{2^k}) = T(1)$. This means that $\frac{n}{2^k} = 1 \implies k = \lg n$. Now back the equation.
 \begin{align*}
 T(n) &= 4^k T(\frac{n}{2^k}) + n^2 \bigg( \sum_{i=0}^{k} \frac{1}{\lg \frac{n}{2^{i-1}}} \bigg) \\
-	&= 4^{\lg n} T(1) + n^2 \bigg( \sum_{i=0}^{\lg n} \frac{1}{\lg n - \lg2^{i-1}} \bigg) \\
+	&= 4^{\lg n} T(1) + n^2 \bigg( \sum_{i=0}^{\lg n} \frac{1}{\lg n - \lg2^{i-1}} \bigg) & \text{rewrite $k$}\\
 	&= \Theta(n^2) + n^2 \bigg( \sum_{i=0}^{\lg n} \frac{1}{\lg n + 1 - i} \bigg) \\
 	&= \Theta(n^2) + n^2 \bigg( \sum_{i=0}^{\lg n} \frac{1}{i + 1} \bigg) & \text{starting from the end (okay because $k$ is finite)} \\
 	&= \Theta(n^2) + n^2 \bigg( \sum_{i=1}^{\lg n + 1} \frac{1}{i} \bigg)
@@ -18,7 +18,7 @@ From the introduction slides,
 \begin{align*}
 \sum_{i=1}^{n} \frac{1}{i} &\in \Theta(\log n) \\
 \implies \sum_{i=1}^{\lg n + 1} \frac{1}{i} &\in \Theta(\log\log n ) \\
-\implies T(n) &= \Theta(n^2) + n^2 \Theta(\log\log n)
+\implies T(n) &= \Theta(n^2) + \Theta(n^2\log\log n)
 \end{align*}
 Therefore, $T(n) \in \Theta(n^2 \log\log n)$.
 \done

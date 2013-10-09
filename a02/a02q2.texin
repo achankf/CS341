@@ -1,38 +1,28 @@
 First prove the first part of the question.
-\begin{lemma}
+\begin{lemma}\label{lem:lgbound}
 $\lg n$ is not polynomial bounded.
 \end{lemma}
 \begin{proof}
 Equivalently, it is sufficient to prove that $\lg n = \frac{\ln n}{\ln 2}\in o(n)$.
 \begin{align*}
-\lim_{n \to \infty} \frac{\lg n}{n} &= \lim_{n \to \infty} \frac{1}{\ln 2} \frac{\ln n}{n}\\
-	&= \lim_{n \to \infty} \frac{1}{\ln 2} \frac{\frac{1}{n}}{1} \\
+\lim_{n \to \infty} \frac{\lg n}{n} &= \frac{1}{\ln 2} \lim_{n \to \infty} \frac{\ln n}{n} & \text{convert base}\\
+	&= \frac{1}{\ln 2} \lim_{n \to \infty} \frac{\frac{1}{n}}{1} & \text{L'Hospital}\\
 	&= 0
 \end{align*}
 In other words, $\lg n \in o(n)$.
-Consequently, $\lg n \not\in \Theta(n)$, $\lg n \not\in \Theta(n^2)$, $\cdots$, $\lg n \not\in \Theta(n^x)$, for $x > 0$.
+Consequently, $\lg n \not\in \Omega(n^x)$, for $x > 0$.
+Therefore, $\lg n \not\in \Theta(n^x)$.
 \end{proof}
 Now prove that the master theorem is not applicable for $T(n)$.
 Given $f(n) = n^{2-\lg n}, a = 4, b = 2, n^{\log_b a} = n^2$.
+Since $\lg n \in o(n)$, cases 2 and 3 of the Master Theorem (in CLRS) are inapplicable.
+Hence, we are left with the first case.
+However, CLRS states that $f(n)$ must smaller than $n^{\log_b a}$ by a factor of $n^\epsilon$, for some $\epsilon > 0$.
+But
 \begin{align*}
-\lg n \in o(n^\epsilon) &\implies \lg n < cn^\epsilon & \text{for all $c > 0, n>N$}\\
-	&\implies \frac{n^2}{cn^\epsilon} < \frac{n^2}{\lg n} \\
-	&\implies \frac{1}{c}n^{2-\epsilon} < n^{2 - \lg n}\\
-	&\implies n^{2- \lg n} \in \omega(n^{2-\epsilon}) \\
-	&\implies f(n) \not\in O(n^{\log_b a-\epsilon})
+\frac{f(n)}{n^{\log_b a}} &= \frac{\frac{n^2}{\lg n}}{n^2} \\
+	&= \frac{1}{\lg n}
 \end{align*}
-Hence, the first condition is not satisfied.
-The second condition is not satified because $n^{2-\lg n} \in o(n^2)$; in other words, $f(n) \not\in \Theta(n^{\log_b a})$.
-Similarly,
-\begin{align*}
-\lg n \in o(n^\epsilon) &\implies \lg n < cn^\epsilon & \text{for all $c > 0, n>N$}\\
-	&\implies -\lg n < \lg n < cn^\epsilon & \text{since $\lg n$ is positive for the above condition}\\
-	&\implies n^{-\lg n} < cn^\epsilon \\
-	&\implies n^2n^{-\lg n} < cn^2n^{\epsilon} \\
-	&\implies n^{2-\lg n} < cn^{2 + \epsilon} \\
-	&\implies n^{2- \lg n} \in o(n^{\log_b a+\epsilon}) \\
-	&\implies f(n) \not\in \Omega(n^{\log_b a+\epsilon}) 
-\end{align*}
-Hence, the third condition is not satisfied.
+Since $\lg n$ is not polynomial bounded (by Lemma \ref{lem:lgbound}), there is no factor of $n^\epsilon$; hence, the first condition is not satisfied.
 Therefore, the master theorem is not applicable for $T(n)$.
 \done

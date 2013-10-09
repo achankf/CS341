@@ -15,13 +15,13 @@ k & $T(\frac{n}{2^k})$ & $7^k$ & $7^k(\frac{n}{2^{k-1}})^2$ \\
 So, suppose the recursion completes at the $k$-level, then $T(\frac{n}{2^k}) = 1$, which implies $k = \lg n$.
 Now summing up the costs:
 \begin{align*}
-T(n) &= \sum_{i = 0}^{\lg n} 7^i(\frac{n}{2^{i-1}})^2 \\
-	&= 4n^2 \sum_{i = 0}^{\lg n} (\frac{7}{4})^i & \text{after lots of simplifications}\\
-	&= 4n^2 \frac{(\frac{7}{4})^{\lg n + 1} - 1}{\frac{7}{4} - 1} & \text{geometric series}\\
-	&= cn^2 (\frac{7}{4})^{\lg n} - \Theta(n^2) & \text{for $c$ a constant after collecting constants}\\
-	&= cn^2 n^{\lg \frac{7}{4}} - \Theta(n^2) & \text{log rules} \\
-	&= cn^{2 + \lg 7 - \lg 4} - \Theta(n^2) & \text{more log rules} \\
-	&= cn^{\lg 7} - \Theta(n^2)
+T(n) &= \Theta(1) + \sum_{i = 0}^{\lg n - 1} 7^i(\frac{n}{2^{i-1}})^2 \\
+	&= \Theta(1) + 4n^2 \sum_{i = 0}^{\lg n - 1} (\frac{7}{4})^i & \text{after lots of simplifications}\\
+	&= \Theta(1) + 4n^2 \frac{(\frac{7}{4})^{\lg n} - 1}{\frac{7}{4} - 1} & \text{geometric series}\\
+	&= \Theta(n^2 (\frac{7}{4})^{\lg n}) - \Theta(n^2) & \text{for $c$ a constant after collecting constants}\\
+	&= \Theta(n^2 n^{\lg \frac{7}{4}}) - \Theta(n^2) & \text{log rules} \\
+	&= \Theta(n^{2 + \lg 7 - \lg 4}) - \Theta(n^2) & \text{more log rules} \\
+	&= \Theta(n^{\lg 7}) - \Theta(n^2)
 \end{align*}
 Since $\lg 7 > 2$, therefore $T(n) \in \Theta(n^{\lg 7})$.
 \done

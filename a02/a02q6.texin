@@ -11,14 +11,14 @@ It is counter-intuitive, but let's estimates the bounds pretending that we do no
 
 \begin{tabular}{|l|p{4cm}|l|l|}
 \hline
-Level & T(...) & Number of Nodes (minimum cost) & Maximum Cost \\
+Level & T(...) & Minimum Cost & Maximum Cost \\
 \hline
-1 & $T(\frac{n}{2}), T(\frac{n}{4}), T(\frac{n}{8})$ & 3 & $2^2$ \\
+1 & $T(\frac{n}{2}), T(\frac{n}{4}), T(\frac{n}{8})$ & 1 & $2^3$ \\
 2 & $T(\frac{n}{2}), T(\frac{n}{4}), T(\frac{n}{8})$, 
 		$T(\frac{n}{8}), T(\frac{n}{16}), T(\frac{n}{32})$,
-		$T(\frac{n}{16}), T(\frac{n}{32}), T(\frac{n}{64})$  & $3^2$ & $2^3$\\
+		$T(\frac{n}{16}), T(\frac{n}{32}), T(\frac{n}{64})$  & 1 & $2^4$\\
 $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$\\
-k & a lot & at most $3^k$ & at most $2^{k+1}$ \\
+k & a lot & 1 & at most $2^{k+2}$ \\
 \hline
 \end{tabular}
 
@@ -26,9 +26,9 @@ Suppose the recursion completes at the $k$-level, and the maximum path is the on
 Then $T(\frac{n}{2^k}) = 1$, which implies $k \le \lg n$.
 Now summing up the costs:
 \begin{align*}
-T(n) &\le \Theta(1) + \sum_{i = 0}^{\lg n - 1} 2^{i+1} \\
-	&\le \Theta(1) + 2 \sum_{i = 0}^{\lg n - 1} 2^{i} \\
-	&\le \Theta(1) + 2 \frac{2^{\lg n} - 1}{2 - 1} & \text{geometric series}\\
+T(n) &\le \Theta(1) + \sum_{i = 0}^{\lg n - 1} 2^{i+2} \\
+	&\le \Theta(1) + 4 \sum_{i = 0}^{\lg n - 1} 2^{i} \\
+	&\le \Theta(1) + 4 \frac{2^{\lg n} - 1}{2 - 1} & \text{geometric series}\\
 	&\le \Theta(1) + \Theta(n^{\lg 2}) & \text{log rules}\\
 	\implies T(n) &\in O(n) & \text{what a surprise}
 \end{align*}
@@ -37,12 +37,10 @@ Using similar arguments for the lower bound:
 It is the path that recurses on $T(\frac{n}{8})$.
 This means $k \ge \log_8 n$.
 \begin{align*}
-T(n) &\ge \Theta(1) + \sum_{i = 0}^{\log_8 n - 1} 3^{i} \\
-	&\ge \Theta(1) + \frac{3^{\log_8 n} - 1}{3 - 1} & \text{geometric series}\\
-	&\ge \Theta(1) + \Theta(n^{\log_8 3}) & \text{log rules}\\
-	\implies T(n) &\in \Omega(n^{\log_8 3}) = \Omega(n^{0.528})
+T(n) &\ge \Theta(1) + \sum_{i = 0}^{\log_8 n - 1} 1 \\
+	&\ge \Theta(\log_8 n) \\
+	\implies T(n) &\in \Omega(\log_8 n)
 \end{align*}
-Consequently, $T(n) \in \Omega(n^{\log_8 3})$.
 
-Therefore, the true running time is sandwitched by $\Omega(n^{\log_8 3})$ and $O(n)$.
+Therefore, the true running time is sandwitched by $\Omega(n^{\log_8 n})$ and $O(n)$.
 \done

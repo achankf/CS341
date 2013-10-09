@@ -1,6 +1,6 @@
 \begin{enumerate}
 \item
-First, let's recall the {\tt merge} function in merge sort.
+First, let's recall the {\tt merge} function from merge sort.
 \begin{algorithm}
 merge A1[0,m] A2[0,n]
 	let ret = allocate an array of size n*m
@@ -23,7 +23,7 @@ merge A1[0,m] A2[0,n]
 		idxRet++
 	// will not reach
 \end{algorithm}
-Every iteration a character is pushed into the returning array; hence, the running is $\Theta(n+m)$.
+In every iteration a character is pushed into the returning array; hence, the running is $\Theta(n+m)$.
 
 Now, consider a function that merge two arrays at a time from the list of m arrays.
 \begin{algorithm}
@@ -63,7 +63,7 @@ heapMerge (A1, A2, ... Am)
 	heapify mheap // O(m)
 
 	for i from 1 to mn
-		let pair(element, k) = pop min from mheap // O(lg m)
+		let (element, k) be popped from mheap // O(lg m)
 		ret[i] = element
 		push the first element from Ak if available
 		
@@ -87,5 +87,6 @@ The reason is that min-heap use constant amount of space with and manipulate on 
 Whereas the divide-and-conquer approach constantly create new arrays for each intermediate step -- this has an overhead.
 
 I think {\tt heapMerge} should be use all the time for merging arrays, because it does not need to allocate storage for intermediate arrays.
-Perhaps divide-and-conquer would be more feasible if we were to merge linked list.
+Perhaps divide-and-conquer would be more feasible if we were to merge linked list, where constructing the temporaries would require no extra space.
+\done
 \end{enumerate}

@@ -13,6 +13,8 @@ Each group (top to bottom) of fixed sized $g$ is sorted in $O(1)$; $O(n)$ in tot
 
 The arrangements of the median (middle) row ensures that the pivot is in the centre of the row; one side is larger than the pivot, the other side is smaller; $O(n)$.
 
+Due to the arrangements, a quarter of the rectangle is smaller (or greater) than the the pivot and the rest of the elements.
+
 {\bf Hence, it is possible to split $R$ roughly into 4 sub-rectangles, and the best case is to recurse on one of them; consequently, the worst case is to recurse on 3 of the 4 sub-rectangles.} 
 The rest is about geometry -- figuring the dimension of the worst case's sub-rectangle.
 

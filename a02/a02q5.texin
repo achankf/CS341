@@ -1,5 +1,5 @@
 Due to limitation of TikZ and my lazyness, I will write the recursion tree out in a table.
-Since all 7 recursions split by the same factor ($\frac{n}{2}$), the tree is a complete tree such that each node has 7 nodes.
+Since all 7 recursions split by the same factor ($\frac{n}{2}$), the tree is a complete tree such that each node has 7 children.
 
 \begin{tabular}{|l|l|l|l|}
 \hline

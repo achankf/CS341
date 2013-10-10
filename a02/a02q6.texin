@@ -11,7 +11,7 @@ It is counter-intuitive, but let's estimates the bounds pretending that we do no
 
 \begin{tabular}{|l|p{4cm}|l|l|}
 \hline
-Level & T(...) & Minimum Cost & Maximum Cost \\
+Level & T(...) & Number of Nodes & Cost \\
 \hline
 1 & $T(\frac{n}{2}), T(\frac{n}{4}), T(\frac{n}{8})$ & 3 & $3^2$ \\
 2 & $T(\frac{n}{2}), T(\frac{n}{4}), T(\frac{n}{8})$, 
@@ -42,5 +42,5 @@ T(n) &\le \Theta(1) + \sum_{i = 0}^{\log_8 n - 1} 3^{i} \\
 	\implies T(n) &\in \Omega(n^{\log_8 3}) \approx \Omega(n^{0.528})
 \end{align*}
 
-Therefore, the true running time is sandwitched by $\Omega(n^{\log_8 3})$ and $O(n^{\lg 3})$, and we know a tighter upper bound of $O(n)$.
+Therefore, the true running time is sandwitched by $\Omega(n^{\log_8 3})$ and $O(n^{\lg 3})$, and we know a tighter upper bound of $O(n)$ from induction.
 \done

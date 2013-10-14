@@ -2,10 +2,11 @@
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
-\newtheorem{lemma}{Lemma}
-\newtheorem{claim}{Claim}
-\newtheorem{defn}{Definition}
 \newtheorem{thm}{Theorem}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{claim}[thm]{Claim}
+\newtheorem{coro}[thm]{Corollary}
+\newtheorem{defn}[thm]{Definition}
 \newcommand{\done}[0]{\hfill\ensuremath{\blacksquare}}
 
 \usepackage{amsmath}
@@ -34,7 +35,7 @@
   showstringspaces=false,
   stepnumber=1,
   basicstyle=\ttfamily,
-  morekeywords={let, or ,and, then},
+  morekeywords={let, or ,and, then, cons},
   frame=single,
   breaklines=true,
   lineskip={-1.5pt},

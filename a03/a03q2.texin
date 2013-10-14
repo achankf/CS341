@@ -1,0 +1,120 @@
+{\bf Idea} We use the observation that by taking the middle of the k-quantile, we can divide the problem into {\bf roughly} 2 smaller problems of $\frac{k}{2}$-quantiles.
+
+First, we consider a $\Theta(n)$ selection algorithm that is like binary search.
+Let {\tt MoM} denotes the median of medians algorithm.
+
+\begin{algorithm}
+select A[1..n] target_pos
+	let p = MoM A // median element as the pivot -- O(n)
+
+	// partition A into upper and lower sets -- O(n)
+	let U = filter A by taking A[i] >= A[p], for i != p
+	let L = filter A by taking A[i] < A[p], for i != p
+
+	// search for target_pos in the one of the n/2 halves -- T(n/2)
+	if p < target then
+		return select L target_pos
+	if p > target then
+		return select U target_pos
+	else // we can put the = case before the L,U partitioning
+		return A[p]
+\end{algorithm}
+Now to prove that it is linear, consider its recurrence relation.
+\begin{align*}
+T(n) =
+	\begin{cases}
+		T(\frac{n}{2}) + cn & \text{when } n > 1\\
+		\Theta(1) & \text{otherwise}
+	\end{cases}
+\end{align*}
+By the master theorem, $T(n) \in \Theta(n)$.
+
+Now consider some properties of numbers.
+For some $k$-quantile, there are $k-1$ elements by which divide a collection of number into $k$ sets.
+This means the index of each quantile is a factor of $\frac{n}{k}$.
+\begin{claim}\label{claim:kquant}
+If the ordered set of $k$-quantiles $S$ is being roughly halves by the $\floor{\frac{k}{2}}$ elements, then the lower half, $L$, contains $\floor{\frac{k}{2}} - 1$ elements, and the upper half, $U$, contains $k - \floor{\frac{k}{2}} - 1$ elements.
+\end{claim}
+\begin{proof}
+Let's prove by induction.
+
+{\bf Base Case}
+First we ignore the trivial case $k = 1$, because that means $S$ has no elements so it does not satisfy the assumption of the claim (need a pivot for partitioning).
+
+If $k = 2$, then $L$ has $\floor{\frac{2}{2}} - 1 = 1-1 = 0$ elements, while $U$ has $2 - \floor{\frac{2}{2}} - 1 = 2 - 1 - 1 = 0$ elements.
+Of course, we know that the median is the only 2-quantile.
+
+{\bf Inductive Step} Suppose $k$ is even, so that $k = 2p, p \in \mathbb{N}$.
+Then $S$ has $k-1 = 2p - 1$ elements.
+Now, if we split $S$ by the $\floor{\frac{k}{2}}$-th element, say $b$, then
+\begin{align*}
+|S \setminus \{b\}| = (2p - 1) - 1 = 2p - 2
+\end{align*}
+This means we can split $S$ evenly into two $(p-1)$-element sets.
+Notice that $p = \frac{k}{2} = \floor{\frac{k}{2}}$.
+Therefore,
+\begin{align*}
+|L| &= p - 1 = \floor{\frac{k}{2}} - 1\\
+|U| &= p - 1 = (2p - p) - 1 = k - \floor{\frac{k}{2}} - 1
+\end{align*}
+Thus, the claim is true for even $k \ge 2$.
+
+Suppose $k$ is odd, so that $k = 2p+1, p \in \mathbb{N}$.
+Then, $S$ has $k-1 = 2p$ elements.
+Notice that the middle element is the $p$-th element, which is slightly less than the true middle, as below.
+\begin{align*}
+\frac{k}{2} &= \frac{2p+1}{2} \\
+	&= p + \frac{1}{2} \\
+\implies \floor{\frac{k}{2}} &= p \text{ such that } 2p = k -1
+\end{align*}
+This means that the $p$-th element is always in the end of $L$.
+Hence, we can form the following partition for $S$.
+\begin{align*}
+S = \underbrace{L}_\text{$p-1$ elements} \cup \{b\} \cup \underbrace{U}_\text{$p$ elements}
+\end{align*}
+Therefore,
+\begin{align*}
+|L| &= p - 1 = \floor{\frac{k}{2}} - 1\\
+|U| &= p = 2p - p = (k - 1) - p = k -  \floor{\frac{k}{2}} - 1
+\end{align*}
+Therefore, the claim is true for odd $k \ge 2$.
+
+Therefore, by induction, the claim holds for all $k \ge 2$.
+\end{proof}
+
+Thus, we can first find the middle $k$-quantile and then use it as a pivot to split the given collection two sets: one set, $U$ in which elements greater than the pivot value; and the other one, $L$, less than the pivot value -- both collections have sizes by a factor of $\frac{n}{k}$.
+
+\begin{coro}
+Then, as a consequence of claim \ref{claim:kquant}, we have 2 smaller problems of solving the $\floor{\frac{k}{2}}$-quantiles in $L$, and $(k-\floor{\frac{k}{2}})$-quantiles in $U$.
+\end{coro}
+
+\begin{algorithm}
+kquan A[1..n] k
+	if k = 1 then // base case -- O(1)
+		return NULL
+
+	// O(n) filtering
+	middle = floor(k / 2) // the close-to-middle quantile
+	pivot = n * k / 2 // index in the A
+	L = take A for anything <= A[pivot] except the pivot element
+	U = take A for anything > A[pivot]
+
+	return // return a list of quantiles -- roughly 2T(k/2)
+		cons	(select A pivot) // Scheme-like syntax
+					(append kquan(L,middle) kquan(U, n-middle))
+\end{algorithm}
+Then the easy part, consider the recurrence relation.
+\begin{align*}
+T(k) &=
+	\begin{cases}
+		2T(\frac{k}{2}) + cn & \text{ for } k > 1 \\
+		\Theta(1) & \text{ for } k = 1
+	\end{cases}
+\end{align*}
+This is just like merge sort, except $T$ depends on $k$ instead of $n$, so
+\begin{align*}
+T(k) &= 2^{\lg k} T(1) + cn \lg k \\
+	&= k + cn \lg k
+\end{align*}
+Since $n \ge  k$ by assumption, so $T(k) \in \Theta(n\lg k)$ and so $T(k) \in O(n\lg k)$, as required.
+\done

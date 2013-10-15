@@ -1,0 +1,27 @@
+Let's do some preprocessing.
+Suppose $cd = n + e$, for some constant $e \ge 0$, so that $d = \frac{n+e}{c}$.
+Thus, $d \in \Theta(n)$.
+\begin{enumerate}
+\item
+Given $T(n) = T(n-c) + kn$.
+Then we have the following.
+\begin{align*}
+T(n) &= T(n - cd) + \sum_{i=1}^d kn \\
+	&= \Theta(1) + dkn \\
+	&= \Theta(1) + kn \Theta(n) \\
+\implies T(n) &= \Theta(n^2)
+\end{align*}
+Since $T(n) = \Theta(n^2)$, so $T(n) = O(n^2)$, as required.
+\done
+\item
+Given $T(n) = aT(n-c) + k$.
+Then we have the following.
+\begin{align*}
+T(n) &= aT(n-c) + k \\
+	&= a^d T(n-cd) + \sum_{i=1}^d k \\
+	&\in \Theta(a^d + kd) \\
+	&\in \Theta(a^n + n)
+\end{align*}
+Since $a > 1$, $T(n) \in \Theta(a^n)$ grows exponentially.
+\done
+\end{enumerate}

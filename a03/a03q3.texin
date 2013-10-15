@@ -1,0 +1,34 @@
+This is a simpler problem.
+The idea is similar to merge sort, except in the combining process we test linearly on either the left and right side, in order to decide which one is a majority.
+We make the observation that if a box is {\bf not} the majority in the sublist, then it is {\bf not} the majority in the entire list.
+
+Suppose {\tt test(array,element)} is the function that decides whether two boxes have the same hidden number.
+Consider the function {\tt majority} that returns the majority element.
+\begin{algorithm}
+majority A[1..n]
+	if n = 1 then // 1 element in a 1-element set is a majority
+		return A[n]
+
+	// find candidates with merge-sort-like partitioning -- 2T(n/2)
+	L = majority A[1..n/2]
+	U = majority A[n/2+1..n]
+
+	// n+n/2+n/4+... = O(n) in total
+	Lc = count the number of times test(A,L) is true
+	Uc = count the number of times test(A,U) is true
+
+	if Lc > n/2 then
+		return L
+	else if Uc > n/2 then
+		return U
+	else
+		return NULL // assume test will return false for NULL
+\end{algorithm}
+Then the function that we want is the following.
+\begin{algorithm}
+has_majority A[1..n]
+	return (majority A) is not NULL
+\end{algorithm}
+The run time of {\tt has\_majority} is $\theta(T(majority))$, which has the same recurrence as merge sort.
+Therefore, $T(n) \in \Theta(n \lg n)$
+\done

@@ -1,0 +1,31 @@
+The first ``foolproof" thing for divide-and-conquer is to pull out the merge sort template.
+\begin{algorithm}
+numDom_helper A[1..n] 
+	if size of A = 0 then // base case
+		return 0
+
+	ret += numDom_helper A[1..n/2]  // T(n/2)
+	ret += numDom_helper A[n/2+1,n] // T(n/2)
+
+	// n/2+n/4+n/8+... = O(n) in total
+	ret += count the number of dominate pairs
+					for A[n/2] in A[1..n/2-1] (*@\label{algo:7_combine}@*) 
+
+	return ret
+\end{algorithm}
+However, obviously we are not done yet.
+Notice in line \ref{algo:7_combine} we need to make sure that $A$ is sorted so that $A[n/2]$ cannot form a valid pair with elements after it.
+\begin{algorithm}
+numDom A[1..n]
+	sort A in descending order by x, then by y // O(nlgn)
+	return numDom_helper A
+\end{algorithm}
+Now we need to prove that $A[i]$ cannot form any pair after $i$.
+\begin{claim}
+For an array of coordinates, $A$, that is sorted by x, then by y, the $i$-th element of $A$ cannot dominate all elements after $i$.
+\end{claim}
+\begin{proof}
+Suppose by way of contradiction that for $i<j\le n$, the $j$-th element can dominate the $i$-th element.
+Let $A_i = (x_1,y_1)$ and $A_j = (x_2, y_2)$.
+Since $A_j$ dominates $A_i$, then we have $x_2 \le$
+\end{proof}

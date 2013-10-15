@@ -1,31 +1,20 @@
-The first ``foolproof" thing for divide-and-conquer is to pull out the merge sort template.
-\begin{algorithm}
-numDom_helper A[1..n] 
-	if size of A = 0 then // base case
-		return 0
+{\bf Idea} First, we have to realize that we can form at most ${n \choose 2} \in \Theta(n^2)$ pairs.
+So, that means we have to do something clever to avoid $O(n^2)$ worst case.
+That is, we sort the set of cooridinates and then infer the number of pairs for each coordinate in $O(1)$ time {\bf in total} (i.e. geometric series for $r < 1$), so that the combining step cost $O(n)$ {\bf in total}.
 
-	ret += numDom_helper A[1..n/2]  // T(n/2)
-	ret += numDom_helper A[n/2+1,n] // T(n/2)
-
-	// n/2+n/4+n/8+... = O(n) in total
-	ret += count the number of dominate pairs
-					for A[n/2] in A[1..n/2-1] (*@\label{algo:7_combine}@*) 
-
-	return ret
-\end{algorithm}
-However, obviously we are not done yet.
-Notice in line \ref{algo:7_combine} we need to make sure that $A$ is sorted so that $A[n/2]$ cannot form a valid pair with elements after it.
-\begin{algorithm}
-numDom A[1..n]
-	sort A in descending order by x, then by y // O(nlgn)
-	return numDom_helper A
-\end{algorithm}
-Now we need to prove that $A[i]$ cannot form any pair after $i$.
+Now, let's consider the following observations.
+The proofs are omitted because they follows from the way that the set is being sorted and from the definition of dominance (not that I am lazy or anything {\tt:)}).
 \begin{claim}
-For an array of coordinates, $A$, that is sorted by x, then by y, the $i$-th element of $A$ cannot dominate all elements after $i$.
+Let $S^1$ be an ordered set of input coordinates by the {\bf x-coordinates} in ascending order, then by y-coordinates in descending order.
+If $i > j$, then $S^1_i$ can not dominate $S^1_j$.
 \end{claim}
-\begin{proof}
-Suppose by way of contradiction that for $i<j\le n$, the $j$-th element can dominate the $i$-th element.
-Let $A_i = (x_1,y_1)$ and $A_j = (x_2, y_2)$.
-Since $A_j$ dominates $A_i$, then we have $x_2 \le$
-\end{proof}
+
+\begin{coro}
+If $S^1$ is being partitioned into 2 halves by the x-coordinates ($L$ for the lower x's, $U$ for the upper x's), then elements in $U$ cannot dominate elements in $L$.
+\end{coro}
+{\bf This means only the elements in $L$ will look for domination, and elements in $U$ will be used by elements in $L$ for counting the pairs.}
+\begin{claim}
+Let $S^2$ be an ordered set of input coordinates by the {\bf y-coordinates} in descending order, then by x-coordinates in ascending order.
+If $i < j$, then $S^2_i$ can not dominate $S^2_j$.
+\end{claim}
+Suppose we can scan the plot from top to bottom, then we just need to keep track the number of elements seen so far from $U$ in a counter, say $c$; then each time when we see an element, say $x$ from $L$, it follows that $x$ dominates $c$ coordinates.

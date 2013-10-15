@@ -1,5 +1,5 @@
 This is a simpler problem.
-The idea is similar to merge sort, except in the combining process we test linearly on either the left and right side, in order to decide which one is a majority.
+The idea is similar to merge sort, except in the combining process we test linearly {\bf in total} on both the left and right side, in order to decide which one is a majority.
 We make the observation that if a box is {\bf not} the majority in the sublist, then it is {\bf not} the majority in the entire list.
 
 Suppose {\tt test(array,element)} is the function that decides whether two boxes have the same hidden number.

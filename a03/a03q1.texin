@@ -8,15 +8,16 @@ S = \{ A_i = (s,f) : 1 \le i \le n \}
 \end{align*}
 \end{defn}
 \begin{defn}
-The {\bf overlapping set} $T$ (the intervals have some periods in common).
+The {\bf overlapping set} $T$ (all intervals that have some periods in common).
 \begin{align*}
-T = \{ A_i \in S : \cap A_i \neq \emptyset , 1 \le i \le n \}
+T = \{ A_i \in S : \cap_{i=1}^p A_i \neq \emptyset , p \in \mathbb{N} \}
 \end{align*}
 \end{defn}
-Notice if intervals $x,y,z \in S$ all overlap each others, then it is possible that $T = \{x\}, \{x,y\}, \{x,y,z\}$, etc.
+Notice $S$ can have multiple $T$'s.
+If intervals $x,y,z \in S$ all overlap each others, then it is possible that $T = \{x\}, \{x,y\}, \{x,y,z\}$, etc.
 However, I only want the largest of such sets ($\{x,y,z\}$), so let's make another defintion.
 \begin{defn}
-The {\bf maximum-overlapping set} $U = \cup T$, such that $T_i \cap T_j \neq \emptyset, i \neq j$.
+The {\bf maximum-overlapping set} $U = T_i$, such that $T_i \not\subset T_j, i \neq j$.
 \end{defn}
 Observe that
 \begin{itemize}
@@ -24,10 +25,9 @@ Observe that
 All max-overlapping sets form $S$;
 $S = \cup U$;
 \item
-No two max-overlapping sets have a common interval;
-$\cap U = \emptyset$;
-\item
-And $\sum |U| = n$.
+Since we can have intervals $a,b,c$ such that $a$ overlap with $b$ and $c$, but $b$ and $c$ are disjoint.
+So we can have $U_1 = \{a,b\}$ and $U_2 = \{a,c\}$.
+Hence, $\sum |U| \ge n$ 
 \end{itemize}
 
 \begin{claim}\label{claim:GIC_k_colourings}

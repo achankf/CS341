@@ -1,4 +1,5 @@
-{\bf Idea} We use the observation that by taking the middle of the k-quantile, we can divide the problem into {\bf roughly} 2 smaller problems of $\frac{k}{2}$-quantiles.
+{\bf Idea} We use the observation that by taking the middle of the k-quantile, we can {\bf roughly} divide the problem into 2 smaller problems of $\frac{k}{2}$-quantiles of size $\frac{n}{2}$.
+Notice if $n = 2^b$ for $b \in \mathbb{N}$ then we don't need ``{\bf roughly}."
 
 First, we consider a $\Theta(n)$ selection algorithm that is like binary search.
 Let {\tt MoM} denotes the median of medians algorithm.
@@ -33,9 +34,8 @@ By the master theorem, $T(n) \in \Theta(n)$.
 
 Now consider some properties of numbers.
 For some $k$-quantile, there are $k-1$ elements by which divide a collection of number into $k$ sets.
-This means the index of each quantile is a factor of $\frac{n}{k}$.
 \begin{claim}\label{claim:kquant}
-If the ordered set of $k$-quantiles $S$ is being roughly halves by the $\floor{\frac{k}{2}}$ elements, then the lower half, $L_s$, contains $\floor{\frac{k}{2}} - 1$ elements, and the upper half, $U_s$, contains $k - \floor{\frac{k}{2}} - 1$ elements.
+If the ordered set of $k$-quantiles $S$ is being roughly halves by the $\floor{\frac{k}{2}}$-th elements, then the lower half, $L_s$, contains $\floor{\frac{k}{2}} - 1$ elements, and the upper half, $U_s$, contains $k - \floor{\frac{k}{2}} - 1$ elements.
 \end{claim}
 \begin{proof}
 Let's prove by induction.
@@ -83,7 +83,7 @@ Therefore, the claim is true for odd $k \ge 2$.
 
 Therefore, by induction, the claim holds for all $k \ge 2$.
 \end{proof}
-Thus, we can first find the middle $k$-quantile and then use it as a pivot to split the given collection two sets: one set, $U$ in which elements greater than the pivot value; and the other one, $L$, less than the pivot value -- both collections have sizes by a factor of $\frac{n}{k}$.
+Thus, we can first find the middle $k$-quantile and then use it as a pivot to split the given collection two sets: one set, $U$ in which elements greater than the pivot value; and the other one, $L$, less than the pivot value -- both collections have sizes {\bf roughly} by a factor of $\frac{n}{k}$, so we can {\bf roughly} divide them equally with the remaining $k$-quantiles.
 \begin{coro}
 Then, as a consequence of claim \ref{claim:kquant}, we have 2 smaller problems of solving the $\floor{\frac{k}{2}}$-quantiles in $L$, and $(k-\floor{\frac{k}{2}})$-quantiles in $U$.
 \end{coro}
@@ -100,8 +100,8 @@ kquan A[1..n] k
 	U = take A for anything > A[pivot]
 
 	return // return a list of quantiles -- roughly 2T(k/2)
-		cons	(select A pivot) // Scheme-like syntax
-					(append kquan(L,middle) kquan(U, n-middle))
+		cons	(select A pivot)
+					(append kquan(L,middle) kquan(U, k-middle))
 \end{algorithm}
 Then the easy part, consider the recurrence relation.
 \begin{align*}

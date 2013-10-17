@@ -1,20 +1,68 @@
 {\bf Idea} First, we have to realize that we can form at most ${n \choose 2} \in \Theta(n^2)$ pairs.
 So, that means we have to do something clever to avoid $O(n^2)$ worst case.
-That is, we sort the set of cooridinates and then infer the number of pairs for each coordinate in $O(1)$ time {\bf in total} (i.e. geometric series for $r < 1$), so that the combining step cost $O(n)$ {\bf in total}.
+That is, we sort the set of cooridinates and then infer the number of pairs for each coordinate with the following claims, so that the combining step cost $O(n)$ {\bf in total}.
 
 Now, let's consider the following observations.
-The proofs are omitted because they follows from the way that the set is being sorted and from the definition of dominance (not that I am lazy or anything {\tt:)}).
 \begin{claim}
-Let $S^1$ be an ordered set of input coordinates by the {\bf x-coordinates} in ascending order, then by y-coordinates in descending order.
-If $i > j$, then $S^1_i$ can not dominate $S^1_j$.
+Let $S^1$ be an ordered set of coordinates sorted by the x-coordinates in ascending order, then by y-coordinates in ascending order.
+If $i < j$, then $S^1_j$ {\bf cannot} dominate $S^1_i$.
 \end{claim}
-
+\begin{proof}
+Suppose by way of contradiction that $S^1_i = (x_i, y_i)$ is dominated by $S^1_j = (x_j, y_j)$.
+Then by definition we have $x_j \le x_i$ and $y_j \le y_i$.
+But by the sorting order of $S^1$, we have $x_i \le x_j$ and $y_i \le x_j$.
+This means the only possibility is $x_i = x_j$ and $y_i = y_j$.
+However, since $S^1$ is a set, so $S^1_i \neq S^1_j$, so we have a contradiction.
+\end{proof}
 \begin{coro}
 If $S^1$ is being partitioned into 2 halves by the x-coordinates ($L$ for the lower x's, $U$ for the upper x's), then elements in $U$ cannot dominate elements in $L$.
 \end{coro}
-{\bf This means only the elements in $L$ will look for domination, and elements in $U$ will be used by elements in $L$ for counting the pairs.}
-\begin{claim}
-Let $S^2$ be an ordered set of input coordinates by the {\bf y-coordinates} in descending order, then by x-coordinates in ascending order.
-If $i < j$, then $S^2_i$ can not dominate $S^2_j$.
-\end{claim}
-Suppose we can scan the plot from top to bottom, then we just need to keep track the number of elements seen so far from $U$ in a counter, say $c$; then each time when we see an element, say $x$ from $L$, it follows that $x$ dominates $c$ coordinates.
+This means only the elements in $L$ will look for domination, and elements in $U$ will be used by elements in $L$ for counting the pairs.
+\begin{coro}
+Let $S^2$ be an ordered set of coordinates sorted by the y-coordinates in descending order, then by x-coordinates in descending order.
+If $i < j$, then $S^2_j$ {\bf cannot} dominate $S^2_i$.
+\end{coro}
+With both $S^1$ and $S^2$, we can scan the plot from top to bottom, then we just need to keep track the number of elements seen so far from $U$ in a counter, say $c$; then each time when we see an element, say $x$ from $L$, it follows that $x$ dominates $c$ coordinates.
+This means we can count in one pass per recursion step (i.e. $n + \frac{n}{2} + \cdots + \frac{n}{2^k} \in \Theta(n)$ {\bf in total}).
+
+Now the algorithm.
+\begin{algorithm}
+countDom S1[1..n] S2[1..k] // S1 for reference, S2 for division
+	let pivot = k/2
+
+	let which = array of size k // tells which half the point is in
+	let L = array of size k // lower partition (size: k/2)
+	let U = array of size k // upper partition (size: k/2)
+
+	// split S2 into halves by x-coordinates while keeping y sorted
+	for i from i to k // O(k) => O(n) in total
+		if S2[i].x <= S1[pivot].x and S2[i].y <= S1[pivot].y then
+			push S2[i] into L
+			push LOWER into which // LOWER can be boolean
+		else
+			push S2[i] into U
+			push UPPER into which // UPPER can be boolean
+
+	let ret = // counter for all dominated pair in this call
+	let c = 0 // counter for number of points that can be dominated
+
+	for i from 1 to k
+		if which[i] = UPPERthen // cannot dominate; only be dominated
+			c++
+		else // lower halve can dominate every read points so far
+			ret += c
+
+	return ret + countDom(S1,L) + countDom(S1, U)
+\end{algorithm}
+Notice the use of $S^1$ as a constant reference.
+Again, the recurrence is the same as quick sort, therefore $T(countDom) \in \Theta(n\lg n)$.
+Since we cannot assume $S^1$ and $S^2$ are sorted, we need to sort it.
+\begin{algorithm}
+countDomRunner A
+	heap-sort A by x, then by y in (ascending,ascending) order
+	let S1 = copy of A
+	heap-sort A by y, then by x in (descending,descending) order
+	return countDom(S1,A)
+\end{algorithm}
+Then, $T(countDomRunner) = \Theta(n\lg n) + T(countDom) = \Theta(n\lg n)$, as required.
+\done

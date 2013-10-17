@@ -1,6 +1,6 @@
-{\bf Idea} It is possible to break the intervals into disjoint subsets, such that in each subset all elements overlap each others.
-The number of colouring depends on the maximum-disjoint subsets (claim \ref{claim:GIC_k_colourings}).
-Then, we will show that the colouring is optimal (claim \ref{claim:GIC_optimal}).
+{\bf Idea} It is possible to break the intervals into subsets, such that the elements share the same sub-intervals.
+The number of greedy colourings depends the subsets that has the most elements (claim \ref{claim:GIC_k_colourings}).
+Then, we will show that the greedy colouring is optimal (claim \ref{claim:GIC_optimal}).
 \begin{defn}
 Let's define a finite set of intervals $S$.
 \begin{align*}
@@ -8,66 +8,46 @@ S = \{ A_i = (s,f) : 1 \le i \le n \}
 \end{align*}
 \end{defn}
 \begin{defn}
-The {\bf overlapping set} $T$ (all intervals that have some periods in common).
+The {\bf overlapping set} $T$.
 \begin{align*}
-T = \{ A_i \in S : \cap_{i=1}^p A_i \neq \emptyset , p \in \mathbb{N} \}
+T = \{ A_i \in S : \text{all $A_i$ have {\bf the same} common sub-intervals} \}
 \end{align*}
 \end{defn}
-Notice $S$ can have multiple $T$'s.
 If intervals $x,y,z \in S$ all overlap each others, then it is possible that $T = \{x\}, \{x,y\}, \{x,y,z\}$, etc.
 However, I only want the largest of such sets ($\{x,y,z\}$), so let's make another defintion.
 \begin{defn}
 The {\bf maximum-overlapping set} $U = T_i$, such that $T_i \not\subset T_j, i \neq j$.
 \end{defn}
-Observe that
-\begin{itemize}
-\item
-All max-overlapping sets form $S$;
-$S = \cup U$;
-\item
+Notice that we can have many $U$'s for $S$.
 Since we can have intervals $a,b,c$ such that $a$ overlap with $b$ and $c$, but $b$ and $c$ are disjoint.
 So we can have $U_1 = \{a,b\}$ and $U_2 = \{a,c\}$.
-Hence, $\sum |U| \ge n$ 
-\end{itemize}
-
 \begin{claim}\label{claim:GIC_k_colourings}
-For the {\tt Greedy Interval Colouring (GIC)} algorithm, a set of intervals $S$ needs exactly $k$ colours if and only if $max(\{U\}) = k$.
+For the {\tt Greedy Interval Colouring (GIC)} algorithm, a set of intervals $S$ needs exactly $k$ colours if and only if $|max(\{U\})| = k$.
 \end{claim}
 \begin{proof}
-{\bf ($\bm\rightarrow$ direction)} Suppose $S$ needs $k$ colours.
-Let's prove by induction.
+Let's do the proof in 2 directions.
 
-{\bf Base Case} Suppose $|S| = 1$, then $max(\{U\}) = 1$, and {\tt GIC} will need 1 colour.
+Multiple max-overlapping sets can either be disjoint or have some common elements, as explained before.
+If they are disjoint, $finish[c] \le s_i$ is true initially and {\tt GIC} will reuse the colour $c$.
+If they have some common elements, then those elements are already being coloured.
+In both cases, previous colourings are being reused.
 
-{\bf Inductive Step}
-Suppose {\tt GIC} has decided to use $g$ colours and the upcoming intervals are $U_i$, such that $|U_i| = k$.
+In the next iteration, $finish[c] \le s_i$ will become false because an overlapping interval has found, so {\tt GIC} will look for the next available colour.
+Either {\tt GIC} has enough colours in its existing pool, or it will add more -- so that each element in $U$ has its own colour which can be shared with other $U$'s.
 
 \begin{itemize}
 \item
-Suppose $g \le k$. 
-Since the max-overlapping sets are disjoint, $finish[c] \le s_i$ is true initially and {\tt GIC} will reuse the colour $c$.
-
-In the next iteration, due to overlapping $finish[c] \le s_i$ will become false, and then {\tt GIC} will look for the next colour.
-Since $k \ge g$, so either {\tt GIC} has enough colours in its existing pool, or it will add more -- up to $k$ colours.
-
-Then, what follows $U_i$ are max-overlapping sets that has at most $k$ elements, and are disjoint from $U_i$, so no new colour will be created.
-Thus, the number of colours is $max(\{U_i\}) = k$.
+{\bf ($\bm\rightarrow$ direction)}
+Since {\tt GIC} is greedy and captures the highest count amongst all $U$'s, and it needs $k$ colours; thus, we have $|max(\{U\})| = k$.
 \item
-If $g > k$, then there exists some max-overlapping sets $U$ such that $|U| = g$, which contradicts the assumption that $max(\{U\}) = |U_i| = k$.
-
-Therefore, by induction the $\rightarrow$ direction holds.
+{\bf ($\bm\leftarrow$ direction)} Suppose $|max(\{U\})| = |U_i| = k$.
+Since each element has its own colour, so {\tt GIC} will need exactly $k$ colours.
 \end{itemize}
-
-{\bf ($\bm\leftarrow$ direction)} Suppose $max(\{U\}) = |U_i| = k$.
-Then, {\tt GIC} trivially needs $k$ colours to handle the overlappings.
-Also, since $U_i$ is disjoint from the other max-overlapping sets, so $U_i$ has all colours that are needed in the rest of $S$.
-Hence, $S$ need $k$ colours.
-
 With both directions together, the claim holds.
 \end{proof}
 The previous claim establishes the number of colours that {\tt GIC} will use, now we have to prove that {\tt GIC} is optimal.
 \begin{claim}\label{claim:GIC_optimal}
-The optimal number of colours for the interval colouring is $max(\{U\}) = k$.
+The optimal number of colours for the interval colouring is $|max(\{U\})| = k$.
 \end{claim}
 \begin{proof}
 Suppose by way of contradiction that $g < k$ colouring is optimal.
@@ -77,5 +57,5 @@ Hence, we arrive a contradiction.
 
 Since by claim \ref{claim:GIC_k_colourings}  an algorithm that returns a $k$-colouring exists, $k$ is the optimal number for the interval-colouring problem.
 \end{proof}
-Together with both claims, and since {\tt GIC} is a greedy algorithm; therefore, the greedy algorithm for the interval colouring problem discovers the optimal solution.
+Therefore, the greedy algorithm for the interval colouring problem discovers the optimal solution.
 \done

@@ -9,9 +9,9 @@ Then we have the following.
 T(n) &= T(n - cd) + \sum_{i=1}^d kn \\
 	&= \Theta(1) + dkn \\
 	&= \Theta(1) + kn \Theta(n) \\
-\implies T(n) &= \Theta(n^2)
+\implies T(n) &\in \Theta(n^2)
 \end{align*}
-Since $T(n) = \Theta(n^2)$, so $T(n) = O(n^2)$, as required.
+Since $T(n) \in \Theta(n^2)$, so $T(n) \in O(n^2)$, as required.
 \done
 \item
 Given $T(n) = aT(n-c) + k$.

@@ -35,22 +35,26 @@ countDom S1[1..n] S2[1..k] // S1 for reference, S2 for division
 	let U = array of size k // upper partition (size: k/2)
 
 	// split S2 into halves by x-coordinates while keeping y sorted
-	for i from i to k // O(k) => O(n) in total
+	for i from i to k // O(k) do => O(n) in total
 		if S2[i].x <= S1[pivot].x and S2[i].y <= S1[pivot].y then
 			push S2[i] into L
 			push LOWER into which // LOWER can be boolean
 		else
 			push S2[i] into U
 			push UPPER into which // UPPER can be boolean
+		end if
+	end for
 
 	let ret = 0 // counter of all dominated pair in this call
 	let minions = 0 // number of points that can be dominated
 
-	for i from 1 to k
+	for i from 1 to k do
 		if which[i] = UPPER then // cannot dominate;only be dominated
 			minions++
 		else // lower halve can dominate every read points so far
 			ret += minions
+		end if
+	end for
 
 	return ret + countDom(S1,L) + countDom(S1, U)
 \end{algorithm}

@@ -8,6 +8,7 @@ Consider the function {\tt majority} that returns the majority element.
 majority A[1..n]
 	if n = 1 then // 1 element in a 1-element set is a majority
 		return A[n]
+	end if
 
 	// find candidates with merge-sort-like partitioning -- 2T(n/2)
 	L = majority A[1..n/2]
@@ -19,10 +20,11 @@ majority A[1..n]
 
 	if Lc <= n/2 or Uc <= n/2 then
 		return NULL // assume test will return false for NULL
-	if Lc > Uc then
+	else if Lc > Uc then
 		return L
 	else
 		return U
+	end if
 \end{algorithm}
 Then the function that we want is the following.
 \begin{algorithm}

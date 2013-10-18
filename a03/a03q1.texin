@@ -1,4 +1,4 @@
-{\bf Idea} It is possible to break the intervals into subsets, such that the elements share the same sub-intervals.
+{\bf Idea} It is possible to break the intervals into subsets, such that every element shares the same overlapping sub-intervals.
 The number of greedy colourings depends the subsets that has the most elements (claim \ref{claim:GIC_k_colourings}).
 Then, we will show that the greedy colouring is optimal (claim \ref{claim:GIC_optimal}).
 \begin{defn}

@@ -16,10 +16,11 @@ select A[1..n] target_pos
 	// search for target_pos in the one of the n/2 halves -- T(n/2)
 	if p < target then
 		return select L target_pos
-	if p > target then
+	else if p > target then
 		return select U target_pos
-	else // we can put the = case before the L,U partitioning
+	else // p = target
 		return A[p]
+	end if
 \end{algorithm}
 Now to prove that it is linear, consider its recurrence relation.
 \begin{align*}
@@ -91,6 +92,7 @@ Now, we have a simple divide-and-conquer algorithm.
 kquan A[1..n] k
 	if k = 1 then // base case -- O(1)
 		return NULL
+	end if
 
 	// n+n/2+n/4+n/8+... = O(n) filtering
 	middle = floor(k / 2) // the close-to-middle quantile

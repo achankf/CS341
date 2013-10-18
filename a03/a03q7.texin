@@ -1,0 +1,19 @@
+{\bf Idea} Just sort $S$
+\begin{algorithm}
+bigPairs S[1..n]
+	heap-sort S in ascending order
+
+	let small = 1 // index for smallest value
+	let big = n // index for largest value
+
+	// exit for efficiency -- though, not needed
+	if S[small] > W then return
+
+	while big != small do
+		if S[small] + S[big] <= W then
+			output(S[small], S[big])
+			small++
+		end if
+		big--
+	done
+\end{algorithm}

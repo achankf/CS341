@@ -23,7 +23,7 @@ Let $S^2$ be an ordered set of coordinates sorted by the y-coordinates in descen
 If $i < j$, then $S^2_j$ {\bf cannot} dominate $S^2_i$.
 \end{coro}
 \begin{magic}
-With both $S^1$ and $S^2$, we can read the points from top to bottom {\bf in one pass}, then we just need to keep track the number of elements seen so far from $U$ with a counter, say $c$; then each time when we see an element $x \in L$, it follows that $x$ dominates $c$ coordinates.
+With both $S^1$ and $S^2$, we can read the points from top to bottom {\bf in one pass}, then we just need to keep track of the number of elements seen so far from $U$ with a counter, say $c$; then each time when we see an element $x \in L$, it follows that $x$ dominates $c$ coordinates.
 \end{magic}
 Now the algorithm.
 \begin{algorithm}
@@ -43,7 +43,7 @@ countDom S1[1..n] S2[1..k] // S1 for reference, S2 for division
 			push S2[i] into U
 			push UPPER into which // UPPER can be boolean
 
-	let ret = // counter of all dominated pair in this call
+	let ret = 0 // counter of all dominated pair in this call
 	let minions = 0 // number of points that can be dominated
 
 	for i from 1 to k

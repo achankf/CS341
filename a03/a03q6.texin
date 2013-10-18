@@ -1,25 +1,22 @@
-{\bf Idea} All men choose the same woman, and all women choose the same man -- no other choice.
-
-\begin{claim}\label{claim:k_men_kth_woman}
-If there are $k \le n$ men remaining, then all $k$ men will propose to the $k$-th higest-ranked woman, $w_k$.
+Let's prove it right away.
+\begin{claim}
+If all men have the same preference, and all women have the same preference, then the stable pairing is unique.
 \end{claim}
 \begin{proof}
 Let's prove by induction.
+Let $w_i$ be the $i$-th highest-ranked woman; similarly, let $m_i$ be the $i$-th highest-ranked man.
 
 {\bf Base Case}
-If $n = 1$, then $k=1$, so the only men will propose to $w_k = w_1$.
+If $n = 1$, then $k=1$, so the only man will propose to the only woman.
 
 {\bf Inductive Step}
-Assume $(n-k)$ pairs have reached stability.
+Assume $(n-k)$ pairs have reached stability, for $k \le n$.
 Suppose by way of contradiction that some men, $m$, will not propose to $w_k$.
-That means those men will propose to the remaining $(k-1)$ women, which is impossible because all men have the same preference, and the $w_k$ has higher preference than the remaining $(k-1)$ women, and the {\tt Gale-Shapley} algorithm loops all remaining women from top to bottom; hence, a contradiction.
+That means those men will propose to the remaining $(k-1)$ women, which is impossible because all men have the same preference, and $w_k$ has higher preference than the remaining $(k-1)$ women, and the {\tt Gale-Shapley} algorithm loops all remaining women from top to bottom; hence, a contradiction.
 Therefore, all men will propose to $w_k$.
+
+Then, all $k$ men will propose to $w_k$, so she will choose the highest-ranked available man, which is $m_k$.
+By induction, we have a unique stable pairing.
 \end{proof}
-\begin{claim}
-If there are $k \le n$ men remaining, the $w_k$ will be matched with the $k$-th highest-ranked men, $m_k$.
-\end{claim}
-\begin{proof}
-By claim \ref{claim:k_men_kth_woman}, all $k$ men will propose to $w_k$, so she will choose the highest-ranked available man, which is $m_k$.
-\end{proof}
-In other words, there is only one way to do the matching, as required.
+As required.
 \done

@@ -1,2 +1,25 @@
-Suppose we have the same preference list for all men, $M$, and the same preference list for all women, $W$, then we have the stable pairing $(m_i,w_i) \in M \times W$.
-Suppose by way of contradiction that there exists another stable pairing.
+{\bf Idea} All men choose the same woman, and all women choose the same man -- no other choice.
+
+\begin{claim}\label{claim:k_men_kth_woman}
+If there are $k \le n$ men remaining, then all $k$ men will propose to the $k$-th higest-ranked woman, $w_k$.
+\end{claim}
+\begin{proof}
+Let's prove by induction.
+
+{\bf Base Case}
+If $n = 1$, then $k=1$, so the only men will propose to $w_k = w_1$.
+
+{\bf Inductive Step}
+Assume $(n-k)$ pairs have reached stability.
+Suppose by way of contradiction that some men, $m$, will not propose to $w_k$.
+That means those men will propose to the remaining $(k-1)$ women, which is impossible because all men have the same preference, and the $w_k$ has higher preference than the remaining $(k-1)$ women, and the {\tt Gale-Shapley} algorithm loops all remaining women from top to bottom; hence, a contradiction.
+Therefore, all men will propose to $w_k$.
+\end{proof}
+\begin{claim}
+If there are $k \le n$ men remaining, the $w_k$ will be matched with the $k$-th highest-ranked men, $m_k$.
+\end{claim}
+\begin{proof}
+By claim \ref{claim:k_men_kth_woman}, all $k$ men will propose to $w_k$, so she will choose the highest-ranked available man, which is $m_k$.
+\end{proof}
+In other words, there is only one way to do the matching, as required.
+\done

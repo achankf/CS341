@@ -1,5 +1,4 @@
 {\bf Idea} We use the observation that by taking the middle of the k-quantile, we can {\bf roughly} divide the problem into 2 smaller problems of $\frac{k}{2}$-quantiles of size $\frac{n}{2}$.
-Notice if $n = 2^b$ for $b \in \mathbb{N}$ then we don't need ``{\bf roughly}."
 
 First, we consider a $\Theta(n)$ selection algorithm that is like binary search.
 Let {\tt MoM} denotes the median of medians algorithm.
@@ -84,9 +83,9 @@ Therefore, the claim is true for odd $k \ge 2$.
 Therefore, by induction, the claim holds for all $k \ge 2$.
 \end{proof}
 Thus, we can first find the middle $k$-quantile and then use it as a pivot to split the given collection two sets: one set, $U$ in which elements greater than the pivot value; and the other one, $L$, less than the pivot value -- both collections have sizes {\bf roughly} by a factor of $\frac{n}{k}$, so we can {\bf roughly} divide them equally with the remaining $k$-quantiles.
-\begin{coro}
+\begin{magic}
 Then, as a consequence of claim \ref{claim:kquant}, we have 2 smaller problems of solving the $\floor{\frac{k}{2}}$-quantiles in $L$, and $(k-\floor{\frac{k}{2}})$-quantiles in $U$.
-\end{coro}
+\end{magic}
 Now, we have a simple divide-and-conquer algorithm.
 \begin{algorithm}
 kquan A[1..n] k
@@ -116,5 +115,5 @@ This is just like merge sort, except $T$ depends on $k$ instead of $n$, so
 T(k) &= 2^{\lg k} T(1) + cn \lg k \\
 	&= k + cn \lg k
 \end{align*}
-Since $n \ge  k$ by assumption, so $T(k) \in \Theta(n\lg k)$ and so $T(k) \in O(n\lg k)$, as required.
+Since $n > k$ by assumption, so $T(k) \in \Theta(n\lg k)$ and so $T(k) \in O(n\lg k)$, as required.
 \done

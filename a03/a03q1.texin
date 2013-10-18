@@ -38,7 +38,7 @@ Either {\tt GIC} has enough colours in its existing pool, or it will add more --
 \begin{itemize}
 \item
 {\bf ($\bm\rightarrow$ direction)}
-Since {\tt GIC} is greedy and captures the highest count amongst all $U$'s, and it needs $k$ colours; thus, we have $|max(\{U\})| = k$.
+Since {\tt GIC} keeps track of the highest $U$ with a colour pool and add new colours to the pool only when overlapping happens, and it needs $k$ colours; thus, we have $|max(\{U\})| = k$.
 \item
 {\bf ($\bm\leftarrow$ direction)} Suppose $|max(\{U\})| = |U_i| = k$.
 Since each element has its own colour, so {\tt GIC} will need exactly $k$ colours.
@@ -51,7 +51,7 @@ The optimal number of colours for the interval colouring is $|max(\{U\})| = k$.
 \end{claim}
 \begin{proof}
 Suppose by way of contradiction that $g < k$ colouring is optimal.
-However, we have $k$ overlapping intervals and we only have $g$ colours.
+However, we have $k$ overlapping intervals but we only have $g$ colours.
 By the pigeonhole principle, at least one interval will share the same colour.
 Hence, we arrive a contradiction.
 

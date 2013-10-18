@@ -1,6 +1,7 @@
 {\bf Idea} This is similar to merge sort, except in the combining process we test both the left and right side, in order to decide which one is a majority.
+\begin{magic}
 We make the observation that if a box is {\bf not} the majority of the sublist, then it is {\bf not} the majority of the entire list.
-
+\end{magic}
 Suppose {\tt test(array,element)} is the function that decides whether two boxes have the same hidden number.
 Consider the function {\tt majority} that returns the majority element.
 \begin{algorithm}
@@ -16,7 +17,7 @@ majority A[1..n]
 	Lc = count the number of times test(A,L) is true
 	Uc = count the number of times test(A,U) is true
 
-	if Lc < n/2 or Uc < n/2 then
+	if Lc <= n/2 or Uc <= n/2 then
 		return NULL // assume test will return false for NULL
 	if Lc > Uc then
 		return L

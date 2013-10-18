@@ -22,9 +22,9 @@ This means only the elements in $L$ will look for domination, and elements in $U
 Let $S^2$ be an ordered set of coordinates sorted by the y-coordinates in descending order, then by x-coordinates in descending order.
 If $i < j$, then $S^2_j$ {\bf cannot} dominate $S^2_i$.
 \end{coro}
-With both $S^1$ and $S^2$, we can scan the plot from top to bottom, then we just need to keep track the number of elements seen so far from $U$ in a counter, say $c$; then each time when we see an element, say $x$ from $L$, it follows that $x$ dominates $c$ coordinates.
-This means we can count in one pass per recursion step (i.e. $n + \frac{n}{2} + \cdots + \frac{n}{2^k} \in \Theta(n)$ {\bf in total}).
-
+\begin{magic}
+With both $S^1$ and $S^2$, we can read the points from top to bottom {\bf in one pass}, then we just need to keep track the number of elements seen so far from $U$ with a counter, say $c$; then each time when we see an element $x \in L$, it follows that $x$ dominates $c$ coordinates.
+\end{magic}
 Now the algorithm.
 \begin{algorithm}
 countDom S1[1..n] S2[1..k] // S1 for reference, S2 for division
@@ -43,22 +43,21 @@ countDom S1[1..n] S2[1..k] // S1 for reference, S2 for division
 			push S2[i] into U
 			push UPPER into which // UPPER can be boolean
 
-	let ret = // counter for all dominated pair in this call
-	let c = 0 // counter for number of points that can be dominated
+	let ret = // counter of all dominated pair in this call
+	let minions = 0 // number of points that can be dominated
 
 	for i from 1 to k
-		if which[i] = UPPERthen // cannot dominate; only be dominated
-			c++
+		if which[i] = UPPER then // cannot dominate;only be dominated
+			minions++
 		else // lower halve can dominate every read points so far
-			ret += c
+			ret += minions
 
 	return ret + countDom(S1,L) + countDom(S1, U)
 \end{algorithm}
-Notice the use of $S^1$ as a constant reference.
-Again, the recurrence is the same as quick sort, therefore $T(countDom) \in \Theta(n\lg n)$.
+Again, the recurrence is the same as merge sort, therefore $T(countDom) \in \Theta(n\lg n)$.
 Since we cannot assume $S^1$ and $S^2$ are sorted, we need to sort it.
 \begin{algorithm}
-countDomRunner A
+countDomRunner A // O(nlgn) + O(n) + T(countDom)
 	heap-sort A by x, then by y in (ascending,ascending) order
 	let S1 = copy of A
 	heap-sort A by y, then by x in (descending,descending) order

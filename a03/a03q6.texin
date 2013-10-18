@@ -12,11 +12,12 @@ If $n = 1$, then $k=1$, so the only man will propose to the only woman.
 {\bf Inductive Step}
 Assume $(n-k)$ pairs have reached stability, for $k \le n$.
 Suppose by way of contradiction that some men, $m$, will not propose to $w_k$.
-That means those men will propose to the remaining $(k-1)$ women, which is impossible because all men have the same preference, and $w_k$ has higher preference than the remaining $(k-1)$ women, and the {\tt Gale-Shapley} algorithm loops all remaining women from top to bottom; hence, a contradiction.
-Therefore, all men will propose to $w_k$.
+That means those men will propose to the remaining $(k-1)$ women, which is impossible because all men have the same preference, and $w_k$ has higher preference than the remaining $(k-1)$ women; hence, a contradiction.
+Therefore, all remaining men will propose to $w_k$.
 
-Then, all $k$ men will propose to $w_k$, so she will choose the highest-ranked available man, which is $m_k$.
-By induction, we have a unique stable pairing.
+Thus, $w_k$ will choose the highest-ranked available man, which is $m_k$.
+So, we have the unique stable pairing $(m_k, w_k)$.
+By induction, the stable pairings are, indeed, unique.
 \end{proof}
 As required.
 \done

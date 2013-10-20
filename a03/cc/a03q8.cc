@@ -86,7 +86,7 @@ retval_t check_strip(veccoor_t &candidates, retval_t &min_cand){
 
 void partition(refcoor_t &coors, refcoor_t &L, refcoor_t &U, num_t x){
 	refcoor_t::iterator it = coors.begin();
-	size_t half = coors.size() / 2;
+	size_t half = coors.size() / 2 + 1; // "ceil" the size for more room
 	for (; it != coors.end(); it++){
 		if (L.size() <= half && it->first < x){ // make sure L doesn't exist n/2 elements
 			L.push_back(*it);
@@ -94,6 +94,7 @@ void partition(refcoor_t &coors, refcoor_t &L, refcoor_t &U, num_t x){
 			U.push_back(*it);
 		} else {
 #ifdef ALFRED_CHAN_DEBUG
+			cout << "ALL:" << coors.size() << " L:" << L.size() << " U:" << U.size() << " half:" << half<< endl;
 			assert(false); // must not reach -- something is wrong with the pivot
 #endif
 		}

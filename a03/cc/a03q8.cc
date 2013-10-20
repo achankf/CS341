@@ -88,7 +88,7 @@ void partition(refcoor_t &coors, refcoor_t &L, refcoor_t &U, num_t x){
 	refcoor_t::iterator it = coors.begin();
 	size_t half = coors.size() / 2 + 1; // "ceil" the size for more room
 	for (; it != coors.end(); it++){
-		if (L.size() <= half && it->first < x){ // make sure L doesn't exist n/2 elements
+		if (L.size() <= half && it->first <= x){ // make sure L doesn't exist n/2 elements
 			L.push_back(*it);
 		} else if (U.size() <= half) { // make sure U doesn't exceed n/2 elements
 			U.push_back(*it);
@@ -102,10 +102,11 @@ void partition(refcoor_t &coors, refcoor_t &L, refcoor_t &U, num_t x){
 }
 
 retval_t closest_pair_helper(refcoor_t &coors, vecx_t &vecx, size_t start, size_t end){
-	if (coors.size() <= 1){
+	const int diff = end - start;
+	if (diff <= 1){
 		coor_t temp(0,0,0);
 		return retval_t(temp,temp,numeric_limits<num_t>::max());
-	} else if (coors.size() == 2){
+	} else if (diff == 1){
 		coor_t a = *coors.begin();
 		coor_t b = *coors.rbegin();
 		return retval_t(a,b,dist(a,b)); // hope the compile will optimize this

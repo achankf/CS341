@@ -102,7 +102,7 @@ void partition(refcoor_t &coors, refcoor_t &L, refcoor_t &U, num_t x){
 }
 
 retval_t closest_pair_helper(refcoor_t &coors, vecx_t &vecx, size_t start, size_t end){
-	if (coors.size() <= 1){
+	if (coors.size() <= 1 || start == end){
 		coor_t temp(0,0,0);
 		return retval_t(temp,temp,numeric_limits<num_t>::max());
 	} else if (coors.size() == 2){

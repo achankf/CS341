@@ -10,8 +10,8 @@ select A[1..n] target_pos
 	let p = MoM A // median element as the pivot -- O(n) in total
 
 	// partition A into upper and lower sets -- O(n) in total
-	let U = filter A by taking A[i] >= A[p], for i != p
-	let L = filter A by taking A[i] < A[p], for i != p
+	let L = filter A by taking A[i] <= A[p], at most n/2 elements
+	let U = filter A by taking A[i] > A[p]
 
 	// search for target_pos in the one of the n/2 halves -- T(n/2)
 	if p < target then
@@ -97,7 +97,7 @@ kquan A[1..n] k
 	// n+n/2+n/4+n/8+... = O(n) filtering
 	middle = floor(k / 2) // the close-to-middle quantile
 	pivot = n * k / 2 // index in the A
-	L = take A for anything <= A[pivot] except the pivot element
+	L = take A for anything <= A[pivot], at most n/2 elements
 	U = take A for anything > A[pivot]
 
 	return // return a list of quantiles -- roughly 2T(k/2)

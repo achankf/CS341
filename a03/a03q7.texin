@@ -1,19 +1,51 @@
-{\bf Idea} Just sort $S$
+\begin{enumerate}
+\item
+{\bf Idea} Simple: just sort $S$ in by some order and then read $S$ in one pass, using the index of the largest element, {\bf big}, as the index of the while loop.
+Then, in each step {\bf big} is decremented, so it will eventually reach {\bf small} in $\Theta(n)$.
 \begin{algorithm}
 bigPairs S[1..n]
-	heap-sort S in ascending order
+	heap-sort S in ascending order // heap-sort for the win!
 
 	let small = 1 // index for smallest value
 	let big = n // index for largest value
 
-	// exit for efficiency -- though, not needed
-	if S[small] > W then return
-
-	while big != small do
+	while big != small do // O(n)
 		if S[small] + S[big] <= W then
 			output(S[small], S[big])
-			small++
+			small++ // take away the smallest element
 		end if
-		big--
+		big-- // take away the largest element every time
 	done
 \end{algorithm}
+Together, the algorithm takes $T(n) \in \Theta(n\lg n)$ due to the awesome heap-sort.
+\done
+
+\item
+Let's prove it right away.
+\begin{claim}
+{\tt bigPairs} outputs the optimal solution for $S$.
+\end{claim}
+\begin{proof}
+Suppose by way of contradiction that {\tt bigPairs} does not return the optimal solution, such that the optimal solution has one more pair in the result, say $(x_i,y_i)$, $i \neq j$.
+Then, either one of $x_i$ or $y_i$ is used in {\tt bigPairs}.
+The case that both $x_i$ and $y_i$ are not used is impossible, because {\tt bigPairs} will just take them as they both are available.
+
+Without loss of generality, suppose that $x_i$ is not used and $y_i$ is used by {\tt bigPairs}, say in the pair $(x_j, y_i)$, $x_j \neq x_i$.
+Since the optimal solution has an extra pair, we know that $x_j$ must be paired with some distinct element, say in $(x_j, y_j)$, $y_j \neq y_i$.
+Then we have the following inequalities.
+\begin{align}
+x_j + y_i &\le W \label{eq:ineq_1} & \text{from {\tt bigPairs}}\\
+x_i + y_i &\le W \label{eq:ineq_2} & \text{from optimal solution}\\
+x_j + y_j &\le W \label{eq:ineq_3} & \text{from optimal solution}\\
+x_i &\le W - y_i & \text{rearrange inequality \ref{eq:ineq_2}}\\
+x_j &\le W - y_i & \text{rearrange inequality \ref{eq:ineq_1}}\\
+\implies x_i &\le x_j \text{ and } x_i \ge x_j\\
+\implies x_i &= x_j
+\end{align}
+Similarly, we can derive $y_i = y_j$.
+This means the optimal solution double counts the same pair.
+Since $S$ is a set, which has no duplicate elements, we have a contradiction.
+Therefore, {\tt bigPairs} returns the optimal solution.
+\end{proof}
+\done
+\end{enumerate}

@@ -36,7 +36,8 @@ countDom S1[1..n] S2[1..k] // S1 for reference, S2 for division
 
 	// split S2 into halves by x-coordinates while keeping y sorted
 	for i from i to k // O(k) do => O(n) in total
-		if S2[i].x <= S1[pivot].x and S2[i].y <= S1[pivot].y then
+		if size(L) < k/2 // at most k/2 elements
+			and S2[i].x <= S1[pivot].x and S2[i].y <= S1[pivot].y then
 			push S2[i] into L
 			push LOWER into which // LOWER can be boolean
 		else

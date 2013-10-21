@@ -1,9 +1,9 @@
-IN= $(shell find -name "*.cc")
-OUT= $(IN:.cc=.exe) randpair.exe
+IN= $(shell find -name "*.cpp")
+OUT= $(IN:.cpp=.exe) randpair.exe
 
 all: $(OUT)
 
-%.exe : %.cc
+%.exe : %.cpp
 	g++ -DALFRED_CHAN_DEBUG -ggdb -O0 $< -o $@
 
 randpair.exe : randpair.c

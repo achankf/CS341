@@ -1,0 +1,44 @@
+{\bf Idea}
+Given $G = (V,E)$ as an adjacency list.
+For each node, we check its neighbours' colour and select a distinct colour from them.
+Let's bound the number number of colours with the following claim.
+\begin{claim}
+Let $G = (V,E)$ is an undirected graph where the degree of each vertex is at most 2.
+Then, $G$ is 3-colourable.
+\end{claim}
+\begin{proof}
+First notice that a graph $G$ has at most degree 2 means each vertex has at most 2 neighbours.
+Also, connected components of $G$ cannot contain $K_5$ or $K_{3,3}$, because that would mean some vertices have more than 2 neighbours, so $G$ is planar.
+However, $G$ does not need to use 4 colours because that means at least one vertex has more than 2 neighbours.
+So, $G$ is 3-colourable.
+\end{proof}
+\begin{algorithm}
+specialColour L
+	let min be 0 // minimal colourings
+
+	// consider a colour is represented by indice of an array
+	let colours be array of 3 boolean values // bounded size
+
+	// O(|V|) -- inner for loop is bounded by constant
+	for each vertex in L do
+
+		set all elements in colours to false // O(1); bounded size
+
+		// fill the colours array with neighbours colour
+		for each neighbour in vertex do // O(1); bounded neighbours
+			set colour of neighbour as used in colours
+		end for
+
+		// linear search finds unused colours and keep track of
+		// number of colours needed for vertex
+		// O(1) because G is 3-colourable
+		let c be linear search on colours for unused colour
+		let new_min be number of colours needed // from linear search
+
+		set colour of vectex to c
+		set min to max(min, new_min)
+	end for
+
+	return min
+\end{algorithm}
+Notice each operation within the first for loop is $O(1)$, so the worst case of {\tt specialColouring} is $O(|V|)$.

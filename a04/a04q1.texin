@@ -1,35 +1,34 @@
-First, by definition a given $G = (V,E)$ is a tree if $G$ is connected, does not have any cycle, and there exists the only root such that its in-degree is 0 (rewording of the given vectice $r$ into a desirable property).
-Notice if there are multiple vertice of in-degree of 0, then $G$ is still a DAG, but is not a tree.
-
 {\bf Idea}
 In this algorithm, $G$ is represented by an adjacency matrix.
 It first looks for an unique root and then run breadth-first search (BFS) on the graph with the root.
 Notice our BFS only traverse from $r$ to every vertices that are reachable from $r$, but it does not traverse every remaining white vertices.
+
+First, by definition a given $G = (V,E)$ is a tree if $G$ is connected, does not have any cycle, and there exists the only root such that its in-degree is 0 (rewording of the given vectice $r$ into a desirable property).
 \begin{itemize}
 \item 
 If the BFS finds a cycle, then $G$ is not a DAG and is not a tree.
 \item
-Also, after BFS completes, if there exists a white vertex (not visited), then $G$ is a DAG but not a tree.
+Also, after BFS completes, if there exists a white vertex (not visited, by linear search), then $G$ is a DAG but not a tree.
 \item
 Otherwise, $G$ is a tree.
 \end{itemize}
-Recall that the maximum number of edges $|E|$ is at most $|V|^2$.
+Recall that the maximum number of edges $|E|$ is at most $|V|^2$ (since the given $G$ can be a complete graph).
 \begin{algorithm}
-isRootTree M // given an adjacency matrix
-	let inDegree be vector
+isRootTree M // given an adjacency matrix (|V| by |V|)
+	let inDegree be vector of integer
 		from summing each column of M // O(|V|^2) = O(|E|)
 
 	let root be NULL
 
-	for each vertex in inDegree // O(|V|) = O(|E|)
+	for each vertex in inDegree do // O(|V|) = O(|E|)
 		return false whenever root is not NULL // multiple roots
 		set root to vertex whenever inDegree(vertex) is 0
 	end for
 
 	BFS(M, root) // O(|V| + |E|) = O(|E|)
-	return false whenever a cycle is found // O(1), done in BFS
 
-	return false whenever white vertices remain // O(|V|) = O(|E|)
+	if a cycle is found then return false // O(1), done in BFS
+	if white vertices remain then return false // O(|V|) = O(|E|)
 	else return true
 \end{algorithm}
 By using the sum rule for Big-oh, the worst case of {\tt isRootTree} is $O(|E|)$.

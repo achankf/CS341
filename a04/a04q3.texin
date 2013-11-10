@@ -1,6 +1,7 @@
 I have 2 solutions for this question: 1) a robust $O(|V| \log |V|)$ solution, and 2) a ``hacky" $O(|V|)$ solution.
 
 Notice for adjacency matrix, finding the all edges of a vertex takes $O(|V|)$, and there are $|V|$ of them -- so looking for vertices of degree 2 takes $O(|V|^2) = O(|E|)$ in total, and updating the vertices and eliminating duplicates takes $O(1)$ because there are only 2 of them and we have their matrix indices.
+So we have a $O(|E|)$ solution.
 
 On the other hand, since size of a list can be determined in $O(1)$, adjacency list takes $O(|V|)$ to find all vertices of degree 2.
 However, updating vertices and eliminating duplicates take $O(|V|)$ due to being a linked list (even if the list is sorted, binary search is impossible for linked list).
@@ -52,5 +53,5 @@ coalesce2 list matrix
 \end{algorithm}
 Notice {\tt coalesce2} does not remove the unneeded vertices, but mark them as not needed.
 The reason is that if I do deletion on an array, it takes $O(|V|)$ each, and if I reconstruct the matrix, it takes $O(|E|)$.
-This solution is also impractical due to extra copies of the graph, and only one is being updated.
+This solution is also impractical due to extra copies of the graph, and only the matrix is being updated.
 But then, given the right arguments, it does the job in $O(|V|)$, so that all I care about.

@@ -20,7 +20,7 @@ The important trick is to make sure each vertex has less than or equal to 20 nei
 This point forces the running time of the algorithm to $O(|V|)$.
 This innocent observation literally took me hours to realize -- perhaps \emph{too} innocent, or is it.
 \begin{magic}
-Notice we need a {\bf book-keeping array}, such that it keeps track of the base size of the component and has a flag that indicates whether it is being counted (to avoid double-counting).
+Notice we need a {\bf book-keeping array}, such that it keeps track of the base size of the strongly-connected component and has a flag that indicates whether it is being counted (to avoid double-counting).
 The worst-case size is $O(|V|)$; that is, the given graph is, indeed, a directed acyclic graph.
 \end{magic}
 
@@ -54,10 +54,10 @@ size(vertex) =
 		\text{base size } + \sum^{O(|V|)}_{v \in \text{ uncounted neighbours}} size(v) & \text{otherwise}
 	\end{cases}
 \end{align*}
-If the sum is greater than 20, then return failure.
+If the size is greater than 20 at some point during the recursion, then return failure, because the limit has reached.
 Again, the running time is $O(|V| + |E|) = O(|V|)$.
 \item
 At this point, every vertex can reach up to 20 vertices, so return success.
 This is $O(1)$.
 \end{itemize}
-If you are still convinced by my arguments and the above algorithm, the running time is $O(|V|)$.
+If you are still convinced by my arguments of the above algorithm, the running time is $O(|V|)$.

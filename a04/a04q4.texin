@@ -6,19 +6,19 @@ A vertex, $v$, that has an edge to a strongly connected components, $C$, means $
 \end{magic}
 \begin{magic}
 Given the graph as an adjacency list.
-The important trick is to make sure each vertex has less than 21 neighbours, so that $|E| = 20|V| = \Theta(|V|)$.
+The important trick is to make sure each vertex has less than or equal to 20 neighbours, so that $|E| = 20|V| = \Theta(|V|)$.
 \end{magic}
 This point forces the running time of {\tt less20} (below) to $O(|V|)$.
 This innocent observation literally took me hours to realize -- perhaps \emph{too} innocent, or is it.
 \begin{magic}
-During the counting of components, we only need to make an array component numbers (IDs that represent each component) of size 21 to make sure that each component does get double-counted.
+During the counting of components, we only need to make an array of component numbers (IDs that represent each component) of size 21 to make sure that each component does not get double-counted.
 By linear search, the cost of searching for double-counting is just $\Theta(21) = \Theta(1)$.
 \end{magic}
 
 The rest is just referencing algorithms and their run time, and make the $O(|E|)$ part to $O(|V|)$.
 Nothing interesting.
 \begin{algorithm}
-less20 adjL
+less20 adjL // given adjacency list
 
 	// make sure that each vertex has at most
 	// 20 neighbours; O(|V|)
@@ -36,26 +36,27 @@ less20 adjL
 	// O(|V| + |E|) = O(2|V|) = O(|V|)
 	comp = strongConnected(adjL)
 
-	create compSize as array of zeroes
-	
 	// count the number of vertices in each component -- O(|V|)
+	create compSize as array of zeroes
 	for each vertex in adjL do
 		compSize[comp[vertex]]++
 	end for
 
 	// count the number of vertices that can possibly be reached
 	// by considering the strongly-connected components
+	// of its neighbours
 	for each vertex in adjL do // O(|V|)
 
 		// NOTICE each vertex can point to at most
 		// 21 components -- itself + 20 neighbours
 		create compIncluded as array of component number of size 21
 
+		// initialize with the size of component that vertex is in
 		let counter be compSize[comp[vertex]]
-
-		// count the component that vertex is in
+		// vertex's component is being counted
 		push comp[vertex] into compIncluded // O(21) = O(1)
 
+		// consider vertex's neighbours
 		for each neighbour in adjL do // O(1); at most 20 times
 			if not compIncluded[comp[neighbour]] then // O(21) = O(1)
 				counter += compSize[comp[neighbour]]
@@ -68,4 +69,4 @@ less20 adjL
 
 	return success
 \end{algorithm}
-Based on summing the reasonings above, the worst-case cost is $O(|V|)$.
+Based on summing costs from reasonings in the comments, the worst-case cost is $O(|V|)$.

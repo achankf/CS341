@@ -1,72 +1,63 @@
 {\bf Idea}
-Use the algorithm for the strongly-connected components.
-Then, for each vertex $v$ we just sum the size of strongly-connected components that $v$ connects -- if the total is greater than 20, then $v$ exists paths to more than 20 vertices.
+Here we consider an algorithm by extending the idea of counting the size of a binary tree $T$ to directed acyclic graphs, such that the size of $T$ is the following.
+\begin{align*}
+size(vertex) = 
+	\begin{cases}
+		1 & \text{if no child} \\
+		1 + size(left) + size(right) & \text{otherwise}
+	\end{cases}
+\end{align*}
+However, life is not easy and we are given any directed graphs, so we need to merge strongly-connected components into one vertex (and do some book-keeping), so that it becames a directed acyclic graph.
+
+Consider some perperties of this problem.
 \begin{magic}
 A vertex, $v$, that has an edge to a strongly connected components, $C$, means $v$ will have a path to at least $|C|$ vertices.
 \end{magic}
 \begin{magic}
 Given the graph as an adjacency list.
-The important trick is to make sure each vertex has less than or equal to 20 neighbours, so that $|E| = 20|V| = \Theta(|V|)$.
+The important trick is to make sure each vertex has less than or equal to 20 neighbours, so that $|E| \le 20|V| = O(|V|)$.
 \end{magic}
-This point forces the running time of {\tt less20} (below) to $O(|V|)$.
+This point forces the running time of the algorithm to $O(|V|)$.
 This innocent observation literally took me hours to realize -- perhaps \emph{too} innocent, or is it.
 \begin{magic}
-During the counting of components, we only need to make an array of component numbers (IDs that represent each component) of size 21 to make sure that each component does not get double-counted.
-By linear search, the cost of searching for double-counting is just $\Theta(21) = \Theta(1)$.
+Notice we need a {\bf book-keeping array}, such that it keeps track of the base size of the component and has a flag that indicates whether it is being counted (to avoid double-counting).
+The worst-case size is $O(|V|)$; that is, the given graph is, indeed, a directed acyclic graph.
 \end{magic}
 
-The rest is just referencing algorithms and their run time, and make the $O(|E|)$ part to $O(|V|)$.
-Nothing interesting.
-\begin{algorithm}
-less20 adjL // given adjacency list
-
-	// make sure that each vertex has at most
-	// 20 neighbours; O(|V|)
-	for each vertex in adjL do
-		let counter be 0
-		for each neighbour in adjL do // O(1); at most 21 times
-			counter++;
-			return failure whenever counter > 20
-		end for
-	end for
-
-	// here we have |E| <= 20|V|
-
-	// refer to algorithm from CLRS or the slides
-	// O(|V| + |E|) = O(2|V|) = O(|V|)
-	comp = strongConnected(adjL)
-
-	// count the number of vertices in each component -- O(|V|)
-	create compSize as array of zeroes
-	for each vertex in adjL do
-		compSize[comp[vertex]]++
-	end for
-
-	// count the number of vertices that can possibly be reached
-	// by considering the strongly-connected components
-	// of its neighbours
-	for each vertex in adjL do // O(|V|)
-
-		// NOTICE each vertex can point to at most
-		// 21 components -- itself + 20 neighbours
-		create compIncluded as array of component number of size 21
-
-		// initialize with the size of component that vertex is in
-		let counter be compSize[comp[vertex]]
-		// vertex's component is being counted
-		push comp[vertex] into compIncluded // O(21) = O(1)
-
-		// consider vertex's neighbours
-		for each neighbour in adjL do // O(1); at most 20 times
-			if not compIncluded[comp[neighbour]] then // O(21) = O(1)
-				counter += compSize[comp[neighbour]]
-				push comp[neighbour] into compIncluded // O(21) = O(1)
-			end if
-		end for
-
-		return failure whenever counter > 20
-	end for
-
-	return success
-\end{algorithm}
-Based on summing costs from reasonings in the comments, the worst-case cost is $O(|V|)$.
+This time, I am going to write the algorithm in English because it needs deep explanations.
+\begin{itemize}
+\item
+First, we do a linear 2D search to make sure each node has at most 20 edges.
+However, notice the inner loop runs at most 21 iterations -- at that point the algorithm reports failure -- so the inner loop actual runs in $O(1)$.
+Thus, the total cost is $O(|V|)$.
+\item
+Use the algorithm for the strongly-connected components, and initialize the book-keeping array.
+We can do this in $O(|V| + |E|) = O(|V|)$.
+\item
+Then, for each vertex $v$ increment size of strongly-connected components that $v$ connects (in the book-keeping array) -- if the total is greater than 20, then $v$ exists paths to more than 20 vertices.
+The cost is $O(|V|)$ for walking through each vertex and increment the array.
+Thus, the cost is $O(|V|)$.
+\item
+Then, recreate the graph by treating the strongly-connected components as one vertex, and add existing edges to point to the components.
+{\bf The trick here is that for each vertex we create an array of 20 vertices, so checking and inserting takes $O(1)$, and if the array is full, we know that the graph fails.}
+So, the running time is
+\begin{align*}
+O(|V|) \times O(20) \times O(\text{ running time of manipulating the array}) = O(|V|)
+\end{align*}
+\item
+Then, we do a specialized depth-first search, as an adaptation to the binary search tree version, such that the visit function returns the number of vertices that can be reached from the given vertex.
+The idea is roughly as the following:
+\begin{align*}
+size(vertex) =
+	\begin{cases}
+		\text{base size}  & \text{if } vertex \text{ has no more neighbour} \\
+		\text{base size } + \sum^{O(|V|)}_{v \in \text{ uncounted neighbours}} size(v) & \text{otherwise}
+	\end{cases}
+\end{align*}
+If the sum is greater than 20, then return failure.
+Again, the running time is $O(|V| + |E|) = O(|V|)$.
+\item
+At this point, every vertex can reach up to 20 vertices, so return success.
+This is $O(1)$.
+\end{itemize}
+If you are still convinced by my arguments and the above algorithm, the running time is $O(|V|)$.

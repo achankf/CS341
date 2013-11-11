@@ -1,5 +1,3 @@
-I have 2 solutions for this question: 1) a robust $O(|V| \log |V|)$ solution, and 2) a ``hacky" $O(|V|)$ solution.
-
 Notice for adjacency matrix, finding the all edges of a vertex takes $O(|V|)$, and there are $|V|$ of them -- so looking for vertices of degree 2 takes $O(|V|^2) = O(|E|)$ in total, and updating the vertices and eliminating duplicates takes $O(1)$ because there are only 2 of them and we have their matrix indices.
 So we have a $O(|E|)$ solution.
 
@@ -26,32 +24,3 @@ coalesce adj_forest
 	end for
 \end{algorithm}
 Therefore, the worst-case running time is $O(|V| \log |V|)$.
-
-After finish writing the above solution, a lighting struck my head and I come up with an impractical $O(|V|)$ worst-case solution.
-Consider instead of given only 1 copy of the graph, we get 2 copies of the same graph -- one is an adjacency list, and the other is an adjacency matrix -- and the vertices are number consistently.
-The idea is that we loop on list for its size, and then manipulate the matrix for duplicate elimination.
-Notice that the construction of those data structures is not my business.
-
-\begin{algorithm}
-coalesce2 list matrix
-	for each vertex in list do // O(|V| * time in loop)
-		continue whenever neighbours is not size 2 // O(1)
-
-		// notice n1, n2 should be pairs of indices in the matrix
-		// and we are manipulating the matrix
-		create alias n1, n2 for neighbours of vertex // O(1)
-		if n1 is not neighbour of n2 in matrix then // O(1)
-			set n1 as neighbour of n2 in matrix // O(1)
-		end if
-		if n2 is not neighbour of n1 in matrix then // O(1)
-			set n2 as neighbour of n1 in matrix // O(1)
-		end if
-		mark vertex as not_needed in matrix // O(1) -- flag
-	end for
-
-	return matrix
-\end{algorithm}
-Notice {\tt coalesce2} does not remove the unneeded vertices, but mark them as not needed.
-The reason is that if I do deletion on an array, it takes $O(|V|)$ each, and if I reconstruct the matrix, it takes $O(|E|)$.
-This solution is also impractical due to extra copies of the graph, and only the matrix is being updated.
-But then, given the right arguments, it does the job in $O(|V|)$, so that all I care about.

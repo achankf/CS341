@@ -1,0 +1,71 @@
+{\bf Idea}
+Use the algorithm for the strongly-connected components.
+Then, for each vertex $v$ we just sum the size of strongly-connected components that $v$ connects -- if the total is greater than 20, then $v$ exists paths to more than 20 vertices.
+\begin{magic}
+A vertex, $v$, that has an edge to a strongly connected components, $C$, means $v$ will have a path to at least $|C|$ vertices.
+\end{magic}
+\begin{magic}
+Given the graph as an adjacency list.
+The important trick is to make sure each vertex has less than 21 neighbours, so that $|E| = 20|V| = \Theta(|V|)$.
+\end{magic}
+This point forces the running time of {\tt less20} (below) to $O(|V|)$.
+This innocent observation literally took me hours to realize -- perhaps \emph{too} innocent, or is it.
+\begin{magic}
+During the counting of components, we only need to make an array component numbers (IDs that represent each component) of size 21 to make sure that each component does get double-counted.
+By linear search, the cost of searching for double-counting is just $\Theta(21) = \Theta(1)$.
+\end{magic}
+
+The rest is just referencing algorithms and their run time, and make the $O(|E|)$ part to $O(|V|)$.
+Nothing interesting.
+\begin{algorithm}
+less20 adjL
+
+	// make sure that each vertex has at most
+	// 20 neighbours; O(|V|)
+	for each vertex in adjL do
+		let counter be 0
+		for each neighbour in adjL do // O(1); at most 21 times
+			counter++;
+			return failure whenever counter > 20
+		end for
+	end for
+
+	// here we have |E| <= 20|V|
+
+	// refer to algorithm from CLRS or the slides
+	// O(|V| + |E|) = O(2|V|) = O(|V|)
+	comp = strongConnected(adjL)
+
+	create compSize as array of zeroes
+	
+	// count the number of vertices in each component -- O(|V|)
+	for each vertex in adjL do
+		compSize[comp[vertex]]++
+	end for
+
+	// count the number of vertices that can possibly be reached
+	// by considering the strongly-connected components
+	for each vertex in adjL do // O(|V|)
+
+		// NOTICE each vertex can point to at most
+		// 21 components -- itself + 20 neighbours
+		create compIncluded as array of component number of size 21
+
+		let counter be compSize[comp[vertex]]
+
+		// count the component that vertex is in
+		push comp[vertex] into compIncluded // O(21) = O(1)
+
+		for each neighbour in adjL do // O(1); at most 20 times
+			if not compIncluded[comp[neighbour]] then // O(21) = O(1)
+				counter += compSize[comp[neighbour]]
+				push comp[neighbour] into compIncluded // O(21) = O(1)
+			end if
+		end for
+
+		return failure whenever counter > 20
+	end for
+
+	return success
+\end{algorithm}
+Based on summing the reasonings above, the worst-case cost is $O(|V|)$.

@@ -51,7 +51,7 @@ Since {\tt topsort} follows DFS, so the running is $O(|V| + |E|)$, which matches
 
 However, there is one point that I want to make.
 Notice that condition for return when bookkeep is not zero.
-You may have a fishy feeling that my algorithm will not reach all nodes, so let's have an informal proof.
+You may have a fishy feeling that the algorithm will not reach all nodes, so let's have an informal proof.
 \begin{claim}
 All vertices will be output by {\tt topsort}, in topological order.
 \end{claim}

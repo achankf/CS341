@@ -2,18 +2,19 @@
 #include <vector>
 #include <set>
 #include <utility>
-#include <stack>
 #include <string>
 #include <sstream>
-#include <algorithm>
-#include <cmath>
+#include <algorithm> // sort
+#include <limits> // max and min limits of integer
 using namespace std;
+
+#define VERTEX_MAX 0x8000
 
 enum colour_t{
 	BLACK, WHITE, GRAY
 };
 
-typedef short node_t;
+typedef int node_t;
 
 struct stat{
 	int discover;
@@ -22,6 +23,8 @@ struct stat{
 	node_t pre;
 };
 
+// originally implemented as adjacency list
+// but too late to change the name now
 typedef set<node_t> neighbour_t;
 typedef pair<node_t,neighbour_t> adj_list_pair_t;
 typedef vector<adj_list_pair_t> adj_list_t;
@@ -42,18 +45,19 @@ void print_al(adj_list_t &al){
 #endif
 
 void rpterr(const char *errmsg){
-	cout << errmsg << endl;
+	cout << "ERROR:" << errmsg << endl;
 	exit(1);
 }
 
+// generate adjacency forest from stdin
 void generate_al(adj_list_t &al){
 	string line;
 	stringstream ss;
 	node_t edge;
 	char colon;
 
-	node_t maxval = -1;
-	node_t minval = 0x7fff;
+	node_t maxval = numeric_limits<int>::min();
+	node_t minval = numeric_limits<int>::max();
 
 	while(getline(cin, line)){
 
@@ -76,6 +80,8 @@ void generate_al(adj_list_t &al){
 	}
 
 	sort(al.begin(), al.end());
+
+	// check for invalid input
 	if (minval < 0
 		|| al.rbegin()->first < maxval 
 		|| al.begin()->first > minval) rpterr("some edge is out-of-range");
@@ -89,6 +95,7 @@ void generate_al(adj_list_t &al){
 	}
 }
 
+// similar to the slides
 void DFS_visit(const adj_list_t &al, statistics_t &stats, const reverse_mapper &map, int i, int *time){
 
 	stats[i].colour = GRAY;
@@ -98,7 +105,9 @@ void DFS_visit(const adj_list_t &al, statistics_t &stats, const reverse_mapper &
 	neighbour_t::iterator it = al[i].second.begin();
 	for (; it != al[i].second.end(); it++){
 		if (stats[map[*it]].colour != WHITE) continue;
+		// add predecessor
 		stats[map[*it]].pre = al[i].first;
+		// go deep into neighbours
 		DFS_visit(al, stats, map, map[*it], time);
 	}
 
@@ -107,17 +116,10 @@ void DFS_visit(const adj_list_t &al, statistics_t &stats, const reverse_mapper &
 	stats[i].finish = *time;
 }
 
+// similar to the slides
 void DFS(const adj_list_t &al, statistics_t &stats, const reverse_mapper &map){
 
 	int time = 0;
-
-	if (al.size() <= 0) return;
-
-	// set up stats for DFS
-	for (size_t i = 0; i < al.size(); i++){
-		stat temp = {-1,-1,WHITE,-1};
-		stats.push_back(temp);
-	}
 
 	for (size_t i = 0; i < al.size(); i++){
 		if (stats[i].colour != WHITE) continue;
@@ -125,36 +127,16 @@ void DFS(const adj_list_t &al, statistics_t &stats, const reverse_mapper &map){
 	}
 }
 
-int main(){
-	adj_list_t al;
-	al.reserve(0x7fff);
-
-	generate_al(al);
-
-#ifdef ALFRED_CHAN_DEBUG
-	print_al(al);
-	cout << endl;
-#endif
-
-	statistics_t stats;
-	stats.reserve(al.size());
-	reverse_mapper map;
-	map.reserve(al.size());
-
-	for (size_t i = 0; i < al.size() + 1; i++){
-		map[al[i].first] = i;
-	}
-
-	DFS(al, stats, map);
-
+// do processing on input edges
+void query(const adj_list_t &al, statistics_t &stats, const reverse_mapper &map){
 	node_t u, v;
 	while(cin >> u && cin >> v){
 		// turn node labels into indices
 		const int ui = map[u];
 		const int vi = map[v];
+		const neighbour_t &nei = al[map[u]].second;
 		
 		cout << u << ' ' << v << ' ';
-		neighbour_t &nei = al[map[u]].second;
 
 		// by parenthesis theorem
 		if (nei.find(v) == nei.end()){
@@ -175,4 +157,34 @@ int main(){
 			cout << "cross-edge" << endl;
 		}
 	}
+}
+
+int main(){
+	adj_list_t al;
+	al.reserve(VERTEX_MAX);
+
+	generate_al(al);
+	if (al.size() <= 0) return 0;
+
+#ifdef ALFRED_CHAN_DEBUG
+	print_al(al);
+	cout << endl;
+#endif
+
+	stat temp = {-1,-1,WHITE,-1};
+	statistics_t stats(al.size(), temp);
+
+	// reserve and initialize with dummy value (-1)
+	reverse_mapper map(al.size() + 1, -1);
+
+	// assign the actual values
+	for (size_t i = 0; i < al.size(); i++){
+		map[al[i].first] = i;
+	}
+
+	// depth-first search and store results in stats
+	DFS(al, stats, map);
+
+	// take advantage of memoization and identify the type of edge
+	query(al, stats, map);
 }

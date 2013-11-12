@@ -1,0 +1,37 @@
+{\bf Idea}
+Notice we have given $|E_a| \ge 1$ edges and $|E_a|$ can be as big as $|V|$.
+However, that is not a {\bf constant} upper bound, and sets do not gurantee the ordering of elements.
+Thus, the algorithm needs {\bf some sort of} variable-time sorting.
+
+In other words, we are given a ``normal" graph, such that it has some special properties on the number of the edges and vertices.
+This means it is best to use Kruskal and treat the given graph as ``fresh" inputs.
+
+{\bf Algorithm}
+\begin{itemize}
+\item
+Create an adjacency list of the target graph $G_T = (V \cup \{v\}, T \cup E_a)$, in $O(|V| + 1 + |T| + |E_0|)$.
+Notice $T$ is the set of edges for the spanning tree of $G$.
+\item
+Create the list of edges from $G_T$, sorted by weights.
+The cost is $(|T| + |E_a|) \log (|T| + |E_a|)$.
+\item
+Run Kruskal's algorithm on $G_T$ with the list of sorted edges, in $O((|T|+|E_a|)\log (|V| + 1)$.
+\end{itemize}
+Now, let's bound the size of the edges from the given situation.
+Since $E_a$ are edges between $v$ to any vertices in $V$, so $E_a$ can be at most $|V|$.
+Also, from a well-known theorem, since we are given a {\bf spanning tree}, which is a {\bf tree}, so $|T| = |V| - 1$.
+
+So, we can rewrite the cost of each part as the following
+(excuse me for abusing big-oh notation):
+\begin{align*}
+Cost(\text{bulding new graph}) &= O(|V| + 1 + |T| + |E_0|) \\
+	&\le O(|V| + 1 + (|V| - 1) + |V| \\
+	&\le O(|V|) \\
+Cost(\text{sorting}) &= O((|T|+|E_a|) \log (|T| + |E_a|)) \\
+	&\le O((|V| - 1 + |V|) \log (|V| + |V|) \\
+	&\le O(|V| \log |V|) \\
+Cost(\text{Kruskal}) &= O((|T|+|E_a|) \log (|V| + 1)) \\
+	&\le O(|V| \log |V|)
+\end{align*}
+Therefore, the worst-case running time is $O(|V| \log |V|)$.
+\done

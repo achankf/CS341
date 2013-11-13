@@ -1,5 +1,5 @@
 Both Kruskal's and Prim's algorithms allow negative weights, whereas Dijkstra's does not allow negative weights.
-To see why, think of writing C codes for them, and given an {\bf immutable} graph.
+To see why, think of writing C codes for them, and given an graph.
 
 \begin{enumerate}
 \item

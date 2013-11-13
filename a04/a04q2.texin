@@ -25,6 +25,9 @@ Then, the algorithm continues with another component.
 First, consider the visit function.
 \begin{algorithm}
 function DFSColourVisit(vertex, previous_colour)
+
+	set vertex to GRAY
+
 	// indicates which colour is being used; O(1)
 	let colours be array of boolean
 
@@ -35,16 +38,16 @@ function DFSColourVisit(vertex, previous_colour)
 
 	// O(1) -- linear search on at most 4 colours
 	find unused_colour with the lowest index such that unused_colour is not previous_colour and colours[index] is false
-	// don't you wish there is a programming language like this :)
 
 	// GLOBAL variable; take the max because it indicates the number of used colours
 	set min_colour to max(min_colour, current_colour)
 	
-	set vertex to visited
 	for each neighbour in vertex do
-		continue whenever if neighbour is being visited
+		continue whenever if neighbour is not WHITE
 		DFSColourVisit(neighbour, current_colour)
 	end for
+
+	set vertex to BLACK
 \end{algorithm}
 Notice each operation, other than the loop for recursing on {\tt DFSColourVisit}, is $O(1)$.
 
@@ -54,10 +57,10 @@ function specialColour (L)
 	let min_colour be 0 // minimal colourings
 
 	for each vertex in L do
-		continue whenever vertex is being visited
+		continue whenever vertex is not WHITE
 		DFSColourVisit(vertex, NULL) // no previous colouring
 	end for
 
-	return min_colour // that's our purpose
+	return min_colour // returning the number of colouring is our purpose
 \end{algorithm}
 {\tt specialColour} uses the depth-first search template, so the worst-case complexity is $O(|V| + |E|) = O(|V|)$, because $|E|$ is constantly bounded by the degree 2 attribute of the graph.

@@ -131,17 +131,28 @@ void DFS(const adj_list_t &al, statistics_t &stats, const reverse_mapper &map){
 void query(const adj_list_t &al, statistics_t &stats, const reverse_mapper &map){
 	node_t u, v;
 	while(cin >> u && cin >> v){
+
+		cout << u << ' ' << v << ' ';
+
+		// query edges out-of-bound
+		if (u < 0 || v > (int) al.size() + 1){
+			cout << "no-such-edge" << endl;
+			continue;
+		}
+
 		// turn node labels into indices
 		const int ui = map[u];
 		const int vi = map[v];
 		const neighbour_t &nei = al[map[u]].second;
-		
-		cout << u << ' ' << v << ' ';
 
-		// by parenthesis theorem
+		// not valid edge
 		if (nei.find(v) == nei.end()){
 			cout << "no-such-edge" << endl;
-		} else if (stats[ui].discover < stats[vi].discover
+			continue;
+		}
+
+		// by parenthesis theorem
+		if (stats[ui].discover < stats[vi].discover
 			&& stats[vi].discover < stats[vi].finish
 			&& stats[vi].finish < stats[ui].finish){
 			if (stats[vi].pre == u){

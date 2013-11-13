@@ -23,7 +23,6 @@ This innocent observation literally took me hours to realize -- perhaps \emph{to
 Notice we need a {\bf book-keeping array}, such that it keeps track of the base size of the strongly-connected component and has a flag that indicates whether it is being counted (to avoid double-counting).
 The worst-case size is $O(|V|)$; that is, the given graph is, indeed, a directed acyclic graph.
 \end{magic}
-
 This time, I am going to write the algorithm in English because it needs deep explanations.
 
 {\bf Algorithm}

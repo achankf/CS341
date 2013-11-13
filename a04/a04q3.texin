@@ -1,18 +1,25 @@
+{\bf Idea}
+Instead of travelling every vertices and mark them black, we only visit deeply into the ones that are of degree 2.
+Notice when visiting a vertex of degree 2, it may turn another vertex into degree 2 as well.
+Then, we use black to indicate the the vertex should be cleaned up.
+However, we do not clean up immediately due to the vertex component of the adjacency list being an array.
+Instead, we do ``clean up" by creating a shallow copy of the given graph.
+
 Let's define {\bf adjacency forest} as the following.
 Instead of using lists, we use balanced-search-tree-based {\bf sets} to maintain sorted properties and uniqueness -- duplicate elements can be found in $O(\log |V|)$ and stop insertion.
 Constructing the adjacency forest takes $O(|E| \log |V|)$ -- $O(|V| \log |V|)$ for each $|V|$ vertex -- but that is not my concern because we are {\bf given} it as input.
 
 Here, we are using the visit status (WHITE, BLACK) to determine whether we will delete the vertex later.
 \begin{algorithm}
-function coalesceVisit(vertex)
+function coalesceVisit(vertex) // given vertex is of degree 2
+	mark vertex as GRAY
+
 	create alias n1, n2 for neighbours of vertex // O(1)
 	remove vertex from neighbours of n1 // O(log |V|)
 	remove vertex from neighbours of n2 // O(log |V|)
 	// need to add in both directions because G is undirected
 	add n1 as neighbour of of n2 // O(log |V|) -- no duplicate
 	add n2 as neighbour of of n1 // O(log |V|) -- no duplicate
-	// since we need random access on the vertex, instead of removing elements from array right now, we clean up later
-	mark vertex as BLACK
 
 	for each neighbour in vertex do
 		if degree of neighbour is 2
@@ -20,6 +27,9 @@ function coalesceVisit(vertex)
 			coalesceVisit(neighbour)
 		end if
 	end for
+
+	// since we need random access on the vertex, instead of removing elements from array right now, we clean up later
+	mark vertex as BLACK // indicates to-be-deleted
 \end{algorithm}
 Observe that if one vertex is being coalesced into one, the algorithm needs to check its neighbours, which may becoming degree 2 after the visit.
 Then the main function.

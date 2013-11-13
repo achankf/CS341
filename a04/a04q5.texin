@@ -1,25 +1,17 @@
 {\bf Idea}
 Similarly to the previous question, we use a book-keeping array to keep track of the number of in-going edges for each vertex, except this time we decrement the values during the recursion.
 Finally, output the vertex if the count becomes 0.
-
+\begin{magic}
 Notice the out-going edge of a vertex is an in-going edge of another vertex.
 Also, since we are given a directed acyclic graph, so some vertices must have in-degree of zero.
-
+\end{magic}
 The algorithm basically follows the depth-first search template.
 It sets up the in-degree array, and then calls its helper function whenever it finds a vertex that has in-degree of 0 and is not being visited.
 \begin{algorithm}
 topsort adjL // given adjacency list
 
-	create bookkeep as array of zeroes // O(|V|)
-
-	// initialize the in-degree values
-	for each vertex in adjL do // O(|E|)
-		for each neighbour in vertex do
-			// out-going TO neighbour means in-going FROM vertex
-			bookkeep[neighbour]++
-		end for
-		set colour of vertex to WHITE
-	end for
+	// initialize the in-degree values -- from question 1
+	create bookkeep as findInDegree(adjL)
 
 	for each vertex in adjL do // O(|V| + |E|); for being DFS 
 		continue whenever bookkeep[vertex] is not zero
@@ -28,7 +20,8 @@ topsort adjL // given adjacency list
 		depthfirstzero vertex // aka DFSVisit
 	end for
 \end{algorithm}
-Then the helper function {\tt depthfirstzero} ``removes" (not actually) the vertex and recurse deeply into its neighbours.
+Then the helper function (aka {\tt DFSVisit}).
+Notice nothing is actually being removed -- the ``removing" part just decrement in-degree counters within the book-keeping array, while the graph remain untouched.
 \begin{algorithm}
 depthfirstzero vertex
 	// notice each edge is visited once
@@ -47,23 +40,5 @@ depthfirstzero vertex
 		end if
 	end for
 \end{algorithm}
-Since {\tt topsort} follows DFS, so the running is $O(|V| + |E|)$, which matches with the textbook that.
-
-However, there is one point that I want to make.
-Notice that condition for return when bookkeep is not zero.
-You may have a fishy feeling that the algorithm will not reach all nodes, so let's have an informal proof.
-\begin{claim}
-All vertices will be output by {\tt topsort}, in topological order.
-\end{claim}
-\begin{proof}
-It follows from the fact that if a vertex, $v$, is being ``held" by a ``root" vertex, $r$, then removing $r$ will ``unheld" $v$.
-
-If $r$ is the only ``root" vertex, then the depth-first approach will eventually output $v$.
-
-On the other hand, if $v$ is still being ``held" by some vertex, due to the graph begin a directed acyclic graph, there exists other ``root" vertice, that may ``hold" on to $v$.
-So, when the algorithm recurse and remove the other ``roots," $v$ will eventually be output.
-
-Finally, since a vertex gets output only when there is nobody ``holding" on to it, so the entire output is topologically sorted.
-\end{proof}
-Finally, nothing is actually being removed -- the ``removing" part when decrementing the manipulation of the book-keeping array, while the graph remain untouched.
+Since {\tt topsort} is DFS with constant manipulation on the book-keeping array, so the running is $O(|V| + |E|)$, which matches with the textbook.
 \done

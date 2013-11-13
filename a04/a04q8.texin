@@ -3,8 +3,9 @@ This is because the number of vertices is bounded by $2^{15}$.
 Similarly, the number of edges is bounded by $O(|V|^2) = O(2^{30})$.
 
 For the graph representation, I used the adjacency forest that I mentioned previously.
-In other words, the code uses an array of vertices, such that the edges are stored in a set (usually implemented as balanced search trees by the C++ library).
+In other words, the code uses an array of vertices, such that for each vertex the edges are stored in a set of integer (usually implemented as balanced search trees by the C++ library), where the integer is the index of a vertex.
 This means $O(|V| \times |V| \log |V|) = O(|E| \log |V|) = O(1)$ building time.
+The reason is that the input size is bounded by a constant, and I want to avoid duplicate edges from incorrect inputs, so set is an ideal candidate.
 
 Since the graph traversal is the same, so I used memoization and only computed the graph with DFS once.
 I maded a structure called ``statistics," which stores information gather during DFS, such as the discovery and finishing time, predecessors, and colouring (though not needed in the query).
@@ -20,5 +21,5 @@ T(V,E,n) &= \text{cost of graph } + \text{cost of DFS } + \text{cost of searchin
 	&= O( (|E| + n) \log |V|) \\
 	&= O(n) & \text{\# vertices bounded by a constant}
 \end{align*}
-Well, as you can see, using an adjacency forest is just a ``minor" optimization.
+Well, as you can see, using an adjacency forest does not affect the worst-case complexity.
 \done

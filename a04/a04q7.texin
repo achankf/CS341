@@ -7,11 +7,12 @@ For Kruskal, we just need an {\bf immutable} array of edges that is ordered by t
 Then, it makes a decision on whether it should included the edge based on the {\bf immutable} graph.
 In other words, Kruskal only needs an {\bf ordering} of how to pick the edges, not the actual values of the weights.
 \item
-Similarly for Prim, the weights are left unchanged and are used for decision making, such that the decision forms an ordering, similar to Kruskal.
+Similarly for Prim, the weights are left unchanged and are used for decision making, such that the decision forms an ordering.
 \item
 On the other hand, since Dijkstra's algorithm needs to update the distance of each node, and then makes decision based on the modified values.
-Also, Dijkstra cannot go back the finished vertices.
-Counter-example:
+Also, Dijkstra cannot go back to the finished vertices.
+
+{\bf Counter-example}
 Consider an undirected triangle $G$ with a self loop, and its weight function $W$:
 \begin{align*}
 G &= (\{a,b,c\}, \{(a,b),(b,c),(c,a),(c,c) \} ) \\
@@ -26,13 +27,14 @@ Then running Dijkstra on $(R,a)$ will yield the following cost for going from $a
 \item
 Starting from vertex $a$, and assign $cost(a) = 0$.
 Choose the edge $(a,b)$ because $W(a,b) = 1$ is the lowest, assign $cost(b)=1$.
-Then choose vertex $(a,c)$ because it is the other edge that $a$ has, assign $cost(c)=4$.
+Then choose vertex $(a,c)$ because it is the other edge that $a$ has, assign $cost(c)=3$.
 Then colour $a$ black.
 \item
-The next candidate is $b$ because of the lower weight.
-Choose the edge $(b,c)$, and assign $cost(c) = 3$, since $3 < 4$.
+The next candidate is $b$ because it currently has the lowest distance.
+Choose the edge $(b,c)$, and assign $cost(c) = 2$, since $2 < 3$.
 Then {\bf colour $b$ black} (no more changes to $b$ is allowed), and so on.
 \end{itemize}
-However, if we choose the path $(a,c,c,b)$, then the cost is $4 - 6 + 1 = -1$, which is lower than the Dijkstra path $(a,b)$, which has a cost of 1.
+However, if we choose the path $(a,c,c,b)$, then the cost is $3 - 6 + 1 = -2$, which is lower than the Dijkstra path $(a,b)$, which has a cost of 1.
 Therefore, Dijkstra does not work on negative weights.
 \end{enumerate}
+\done

@@ -1,44 +1,63 @@
 {\bf Idea}
 Given $G = (V,E)$ as an adjacency list.
-For each node, we check its neighbours' colour and select a distinct colour from them.
+Do DFS and colour the whole graph along the way.
 Let's bound the number number of colours with the following claim.
 \begin{claim}
-Let $G = (V,E)$ is an undirected graph where the degree of each vertex is at most 2.
+Let $G = (V,E)$ be an undirected graph where the degree of each vertex is at most 2.
 Then, $G$ is 4-colourable.
 \end{claim}
 \begin{proof}
 First notice that a graph $G$ has at most degree 2 means each vertex has at most 2 neighbours.
 Also, connected components of $G$ cannot contain $K_5$ or $K_{3,3}$, because that would mean some vertices have more than 2 neighbours, so $G$ is planar.
-However, $G$ does not need to use 4 colours because that means at least one vertex has more than 2 neighbours.
-In any case, $G$ is planar, so it is 4-colourable.
+Therefore, $G$ is 4-colourable.
 \end{proof}
+\begin{claim}
+Each connected component in $G$ can contain at most 1 cycle.
+\end{claim}
+\begin{proof}
+Suppose by contracdiction that there exists a component that has 2 cycles.
+Then some vertex, $v$, must have more than 2 neighbours, because being part of exactly one cycle means $v$ has 2 edges that point to other vertices in the cycle, so being in another cycle means $v$ must be connected to at least one other vertex in the other cycle.
+However, the specification says $G$ can have at most degree 2, therefore each component can have at most 1 cycle.
+\end{proof}
+Together, we have the idea that we are colouring in the order $C1, C2, C1, C2, \cdots$ and at the end, if the component is not bipartite, we use a third colour.
+Then, the algorithm continues with another component.
+
+First, consider the visit function.
 \begin{algorithm}
-specialColour L
-	let min be 0 // minimal colourings
+function DFSColourVisit(vertex, previous_colour)
+	// indicates which colour is being used; O(1)
+	let colours be array of boolean
 
-	// consider a colour is represented by indice of an array
-	let colours be array of 4 boolean values // bounded size
-
-	// O(|V|) -- inner for loop is bounded by constant
-	for each vertex in L do
-
-		set all elements in colours to false // O(1); bounded size
-
-		// fill the colours array with neighbours colour
-		for each neighbour in vertex do // O(1); bounded neighbours
-			set colour of neighbour as used in colours
-		end for
-
-		// linear search finds unused colours and keep track of
-		// number of colours needed for vertex
-		// O(1) because G is 4-colourable
-		let c be linear search on colours for unused colour
-		let new_min be number of colours needed // from linear search
-
-		set colour of vectex to c
-		set min to max(min, new_min)
+	// O(1) -- neighbours size is bounded
+	for each neighbour in vertex do
+		set colours[neighbour] to true
 	end for
 
-	return min
+	// O(1) -- linear search on at most 4 colours
+	find unused_colour with the lowest index such that unused_colour is not previous_colour and colours[index] is false
+	// don't you wish there is a programming language like this :)
+
+	// GLOBAL variable; take the max because it indicates the number of used colours
+	set min_colour to max(min_colour, current_colour)
+	
+	set vertex to visited
+	for each neighbour in vertex do
+		continue whenever if neighbour is being visited
+		DFSColourVisit(neighbour, current_colour)
+	end for
 \end{algorithm}
-Notice each operation within the first for loop is $O(1)$, so the worst case of {\tt specialColouring} is $O(|V|)$.
+Notice each operation, other than the loop for recursing on {\tt DFSColourVisit}, is $O(1)$.
+
+Then the main algorithm (again, from the DFS template).
+\begin{algorithm}
+function specialColour (L)
+	let min_colour be 0 // minimal colourings
+
+	for each vertex in L do
+		continue whenever vertex is being visited
+		DFSColourVisit(vertex, NULL) // no previous colouring
+	end for
+
+	return min_colour // that's our purpose
+\end{algorithm}
+{\tt specialColour} uses the depth-first search template, so the worst-case complexity is $O(|V| + |E|) = O(|V|)$, because $|E|$ is constantly bounded by the degree 2 attribute of the graph.

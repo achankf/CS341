@@ -1,6 +1,6 @@
 {\bf Idea}
-Notice we have given $|E_a| \ge 1$ edges and $|E_a|$ can be as big as $|V|$.
-However, that is not a {\bf constant} upper bound, and sets do not gurantee the ordering of elements.
+Notice we are given $|E_a| \ge 1$ edges and $|E_a|$ can be as big as $|V|$.
+However, that is {\bf not a constant} upper bound, and sets do not guarantee the ordering of elements.
 Thus, the algorithm needs {\bf some sort of} variable-time sorting.
 
 In other words, we are given a ``normal" graph, such that it has some special properties on the number of the edges and vertices.
@@ -25,13 +25,13 @@ So, we can rewrite the cost of each part as the following
 (excuse me for abusing big-oh notation):
 \begin{align*}
 Cost(\text{bulding new graph}) &= O(|V| + 1 + |T| + |E_0|) \\
-	&\le O(|V| + 1 + (|V| - 1) + |V| \\
+	&\le O(|V| + 1 + (|V| - 1) + |V|) \\
 	&\le O(|V|) \\
 Cost(\text{sorting}) &= O((|T|+|E_a|) \log (|T| + |E_a|)) \\
-	&\le O((|V| - 1 + |V|) \log (|V| + |V|) \\
+	&\le O((|V| - 1 + |V|) \log (|V| + |V|)) \\
 	&\le O(|V| \log |V|) \\
 Cost(\text{Kruskal}) &= O((|T|+|E_a|) \log (|V| + 1)) \\
 	&\le O(|V| \log |V|)
 \end{align*}
-Therefore, the worst-case running time is $O(|V| \log |V|)$.
+Therefore, by the sum rule the worst-case running time is $O(|V| \log |V|)$.
 \done

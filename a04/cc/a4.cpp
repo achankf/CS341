@@ -90,7 +90,7 @@ void generate_al(adj_list_t &al){
 	if (prev < 0) rpterr("smallest label cannot be less than 0");
 	for (size_t i = 1; i < al.size(); i++){
 		node_t next = al[i].first;
-		if (prev != next - 1) rpterr("label have a hole in between");
+		if (prev != next - 1) rpterr("labels have a hole in between");
 		prev = next;
 	}
 }

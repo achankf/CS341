@@ -61,6 +61,6 @@ function specialColour (L)
 		DFSColourVisit(vertex, NULL) // no previous colouring
 	end for
 
-	return min_colour // returning the number of colouring is our purpose
+	return min_colour // return the number of colouring is our purpose
 \end{algorithm}
-{\tt specialColour} uses the depth-first search template, so the worst-case complexity is $O(|V| + |E|) = O(|V|)$, because $|E|$ is constantly bounded by the degree 2 attribute of the graph.
+{\tt specialColour} uses the depth-first search template, so the worst-case complexity is $O(|V| + |E|) = O(|V|)$, because $|E| \le 2|V|$ due to each node having at most degree 2.

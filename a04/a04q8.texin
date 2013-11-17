@@ -1,0 +1,25 @@
+The short anwser to the complexity part is $O(n)$, where $n$ is the number of query pairs.
+This is because the number of vertices is bounded by $2^{15}$.
+Similarly, the number of edges is bounded by $O(|V|^2) = O(2^{30})$.
+
+For the graph representation, I used the adjacency forest that I mentioned previously.
+In other words, the code uses an array of vertices, such that out-edges are stored in a set of indices of vertex (search-trees-based).
+This means $O(|V| \times |V| \log |V|) = O(|E| \log |V|) = O(1)$ building time.
+The reason is that the input size is bounded by a constant, and I want to avoid duplicate edges from incorrect inputs, so set is an ideal candidate.
+
+Since the graph traversal is the same, so I used memoization and only computed the graph with DFS once.
+I maded a structure called ``statistics," which stores information gather during DFS, such as the discovery and finishing time, predecessors, and colouring.
+Hence, the cost is $O(|V| + |E|) = O(1)$ in one pass.
+
+Then for each query, the code checks for the existence of the edge in $O(\log |V|) = O(1)$, and then the type of the edge is verified by the parenthesis theorem in $O(1)$ time.
+There are $n$ queries in total, therefore the running time is $O(n)$.
+
+Together, the worst-case complexity is the following:
+\begin{align*}
+T(V,E,n) &= \text{cost of graph } + \text{cost of DFS } + \text{cost of searching} \\
+	&= O(|E| \log |V|) + O(|V| + |E|) + O(n \log |V|) \\
+	&= O( (|E| + n) \log |V|) \\
+	&= O(n) & \text{\# vertices bounded by a constant}
+\end{align*}
+Well, as you can see, using an adjacency forest does not affect the worst-case complexity.
+\done

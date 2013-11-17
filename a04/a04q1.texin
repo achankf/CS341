@@ -1,35 +1,55 @@
 {\bf Idea}
-In this algorithm, $G$ is represented by an adjacency matrix.
-It first looks for an unique root and then run breadth-first search (BFS) on the graph with the root.
-Notice our BFS only traverse from $r$ to every vertices that are reachable from $r$, but it does not traverse every remaining white vertices.
+In this algorithm, $G$ is represented by an adjacency list.
+It first looks for an unique root, and then run breadth-first search (BFS) on the graph with the root.
+Notice our \emph{specialized} BFS only traverse from $r$ to every vertices that are reachable from $r$, but it does not traverse every remaining white vertices.
 
-First, by definition a given $G = (V,E)$ is a tree if $G$ is connected, does not have any cycle, and there exists the only root such that its in-degree is 0 (rewording of the given vectice $r$ into a desirable property).
+First, by definition a given graph $G = (V,E)$ is a tree if $G$ is connected, does not have any cycle, and there exists the only root such that its in-degree is 0 (rewording of the given vectice $r$ into a desirable property).
 \begin{itemize}
 \item 
 If the BFS finds a cycle, then $G$ is not a DAG and is not a tree.
 \item
-Also, after BFS completes, if there exists a white vertex (not visited, by linear search), then $G$ is a DAG but not a tree.
+Also, after BFS completes, if there exists a white vertex (not visited, found by linear search), then $G$ is a DAG but not a tree.
 \item
 Otherwise, $G$ is a tree.
 \end{itemize}
-Recall that the maximum number of edges $|E|$ is at most $|V|^2$ (since the given $G$ can be a complete graph).
+
+First, we need a book-keeping array that that keeps track of the number of in-degree for each vertex.
+Consider the following helper function (will be refered later in question 5):
 \begin{algorithm}
-isRootTree M // given an adjacency matrix (|V| by |V|)
-	let inDegree be vector of integer
-		from summing each column of M // O(|V|^2) = O(|E|)
+function findInDegree (L)
+	// book-keeping for the in-degree of each vertex; O(|V|)
+	let inDegree be vector of zeroes
+
+	// initialize inDegree in O(|E|)
+	for each vertex in L do
+		for each neighbour in vertex do
+			// vertex's out-edges are neighbours' in-edges
+			inDegree[neighbour]++
+		end for
+	end for
+\end{algorithm}
+The running time is $O(|E|)$.
+Then the main algorithm.
+\begin{algorithm}
+function isRootTree (L) // given an adjacency list (|V| by |V|)
+
+	// book-keeping for the in-degree of each vertex; O(|E|)
+	let inDegree be findInDegree(L)
 
 	let root be NULL
 
-	for each vertex in inDegree do // O(|V|) = O(|E|)
+	// run exactly Theta(|V|) to make sure there does not exist a second root
+	for each vertex in L do
 		return false whenever root is not NULL // multiple roots
-		set root to vertex whenever inDegree(vertex) is 0
+		set root to vertex whenever inDegree[vertex] is 0
 	end for
 
-	BFS(M, root) // O(|V| + |E|) = O(|E|)
+	BFS(L, root) // O(|V| + |E|) = O(|E|)
 
-	if a cycle is found then return false // O(1), done in BFS
-	if white vertices remain then return false // O(|V|) = O(|E|)
+	if a cycle is found then return false // O(1), from BFS
+	if white vertices remain then return false // O(|V|)
 	else return true
 \end{algorithm}
+Recall that the maximum number of edges $|E|$ is at most $|V|^2$ (since the given $G$ can be a complete graph).
 By using the sum rule for Big-oh, the worst case of {\tt isRootTree} is $O(|E|)$.
 \done

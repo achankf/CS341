@@ -1,26 +1,62 @@
-Notice for adjacency matrix, finding the all edges of a vertex takes $O(|V|)$, and there are $|V|$ of them -- so looking for vertices of degree 2 takes $O(|V|^2) = O(|E|)$ in total, and updating the vertices and eliminating duplicates takes $O(1)$ because there are only 2 of them and we have their matrix indices.
-So we have a $O(|E|)$ solution.
-
-On the other hand, since size of a list can be determined in $O(1)$, adjacency list takes $O(|V|)$ to find all vertices of degree 2.
-However, updating vertices and eliminating duplicates take $O(|V|)$ due to being a linked list (even if the list is sorted, binary search is impossible for linked list).
-Therefore, we have another $O(|E|)$ solution.
-
-Now, let's consider a $O(|V| \log |V|)$ solution given a graph that has a ``simple" modification to adjacency list.
+{\bf Idea}
+Instead of travelling every vertices and mark them black, we only visit deeply into the ones that are of degree 2.
+Notice when visiting a vertex of degree 2, it may turn another vertex into degree 2 as well.
+Then, we use black to indicate the the vertex should be cleaned up.
+However, we do not clean up immediately due to the vertex component of the adjacency list being an array.
+Instead, we do ``clean up" by creating a shallow copy of the given graph.
 
 Let's define {\bf adjacency forest} as the following.
-Instead of using lists, we use b-tree-based {\bf sets} to maintain sorted properties and uniqueness -- duplicate elements can be found in $O(\log |V|)$ and stop insertion.
+Instead of using lists, we use balanced-search-tree-based {\bf sets} to maintain sorted properties and uniqueness -- duplicate elements can be found in $O(\log |V|)$ and stop insertion.
 Constructing the adjacency forest takes $O(|E| \log |V|)$ -- $O(|V| \log |V|)$ for each $|V|$ vertex -- but that is not my concern because we are {\bf given} it as input.
-\begin{algorithm}
-coalesce adj_forest
-	for each vectex in adj_forest do // O(|V| * time in loop)
-		continue whenever neighbours is not size 2 // O(1)
 
-		create alias n1, n2 for neighbours of vertex // O(1)
-		remove vertex from neighbours of n1 // O(log |V|)
-		remove vertex from neighbours of n2 // O(log |V|)
-		add n1 as neighbour of of n2 // O(log |V|) -- no duplicate
-		add n2 as neighbour of of n1 // O(log |V|) -- no duplicate
-		remove vertex from adj_forest
+Here, we are using the visit status (WHITE, BLACK) to determine whether we will delete the vertex later.
+\begin{algorithm}
+function coalesceVisit(vertex) // given vertex is of degree 2
+	mark vertex as GRAY
+
+	create alias n1, n2 for neighbours of vertex // O(1)
+	remove vertex from neighbours of n1 // O(log |V|)
+	remove vertex from neighbours of n2 // O(log |V|)
+	// need to add in both directions because G is undirected
+	add n1 as neighbour of of n2 // O(log |V|) -- no duplicate
+	add n2 as neighbour of of n1 // O(log |V|) -- no duplicate
+
+	for each neighbour in vertex do
+		if degree of neighbour is 2
+			and neighbour is WHITE then
+			coalesceVisit(neighbour)
+		end if
 	end for
+
+	// since we need random access on the vertex, instead of removing elements from array right now, we clean up later
+	mark vertex as BLACK // indicates to-be-deleted
 \end{algorithm}
-Therefore, the worst-case running time is $O(|V| \log |V|)$.
+Observe that if one vertex is being coalesced into one, the algorithm needs to check its neighbours, which may becoming degree 2 after the visit.
+Then the main function.
+\begin{algorithm}
+function coalesce(adj_forest)
+	make every vertex WHITE
+
+	for each vectex in adj_forest do
+		if degree of neighbour is 2
+			and neighbour is WHITE then
+			coalesceVisit(neighbour)
+		end if
+	end for
+
+	// we make shallow copies of the edge sets in adj_forest, so O(|V|) for copying
+	create adj_forest2 as copy of adj_forst for each vertex that is WHITE 
+
+	return adj_forest2
+\end{algorithm}
+Notice each vertex can recurse at most once, and not all vertices will be coloured black.
+\begin{itemize}
+\item
+If the given graph is a complete graph, then the visit function will not be run.
+\item
+If the vertex is of degree 2, then it will add edges to its neighbours and then mark as black.
+Then it will recurse on white neighbours that has degree 2.
+\end{itemize}
+Also, each time in the visit function, it does $O(\log |V|)$ amount of work per vertices.
+Then, every edge can be traversed at most once (or it is being ignored, as in the case of a complete graph).
+So the worst-case running time is $O(|V| \log |V| + |E|)$.

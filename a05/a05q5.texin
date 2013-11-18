@@ -1,0 +1,24 @@
+Let's reduce the problem into solving the Hamiltonian path.
+\begin{itemize}
+\item
+For each student, create a {\bf complete graph} where the vertices are labelled with the course names $c_1, \cdots, c_n$.
+This step is used for explanation and is not needed.
+\item
+Then, join the vertices that have the same label, and eliminate duplicate edges.
+If the algorithm selects 2 vertices that are connected by one edge, we know that we are making a consecutive schedule, because those 2 courses are taken {\bf together} by at least 1 student.
+Let's call the whole graph $G$.
+Here we just create an adjacency matrix, incrementing the edges, and at the end change values that are greater than 1 to 1, and then turn it into an adjacency list -- $O(|V|^2 + |E|)$, which is in P.
+\item
+The key point is the make the complement of $G$, into $G^c$, so that we have relationships of courses that are mutually exclusive amongst students.
+Here we just create a new adjacency list and loop through the old one -- $O(|V| + |E|)$, which is in P.
+\item
+Notice $G^c$ may or may not be connected.
+Suppose a single vertex $c_i$ is not connected, then it means that everyone takes the course $c_i$; in other words, no perfect scheduling exists.
+Finding the connected component is $O(|V| + |E|)$, which is in P; not needed, only for optimization to avoid the NP-complete check.
+\item
+If there exists a Hamiltonian path, then we know that the perfect scheduling exists, because each edge in $G^c$ represents courses that are mutually exclusive.
+So, the algorithm returns the result of {\tt HAMILTONIAN-PATH}$(G^c)$.
+This check is in NP-complete.
+\end{itemize}
+Therefore, since the preprocessing steps are in P, which is in NP, so by the sum rule the problem is NP-complete.
+\done

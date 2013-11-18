@@ -1,0 +1,61 @@
+{\bf Idea}
+This question is similar to the longest common subsequence problem (LCS).
+Then, we have to make adjustments to the formula for LCS.
+The difference in the optimal structure of the algorithm is the case when $x_n = y_m$:
+the current character either has higher gain, so we take the current character; or the previous instance of the character has a higher gain, so we should the previous one instead.
+
+So, the gain function, $G$, will look like the following.
+Notice only the middle line has changed compares to LCS.
+\begin{align*}
+G[i,j] =
+	\begin{cases}
+		0 & \text{if $i = 0$ or $j = 0$} \\
+		max(G[i-1,j-1] + 1, G[i-1,j], G[i,j-1]) & \text{if } x_i = y_j \\
+		max(G[i-1,j], G[i,j-1]) & \text{if } x_i \neq y_j
+	\end{cases}
+\end{align*}
+For the direction function, $D$, it only moves up and left when the values are the same; otherwise, always move up-left and output the character.
+\begin{align*}
+\text{with } maxPrev &= max(C[i-1,j-1],C[i-1,j],C[i,j-1]) \\
+D[i,j] &=
+	\begin{cases}
+		\text{up} & \text{if $maxPrev = C[i-1,j]$ and $C[i,j] = C[i-1,j]$} \\
+		\text{left} & \text{if $maxPrev = C[i,j-1]$ and $C[i,j] = C[i,j-1]$}\\
+		\text{up-left} & \text{otherwise} %\text{if $maxPrev = C[i-1,j-1]$} \\
+	\end{cases}
+\end{align*}
+Let's do some ``engineer proofs" to get myself convinced.
+Given $X = abbc$ and $Y = bbabac$, with given weights as shown in the table.
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+X \textbackslash Y			&		& b(1)	& b(2)	& a(4)	& b(9)	&	a(2)	& c(1) \\
+\hline
+		& 0	&	0			&	{\bf 0}			&	0			&	0			&	0			&	0	\\
+a (1) &	0	&	0			&	0			&	{\bf 5}			&	5			&	5			&	5	\\
+b (2) &	0	&	3			&	4			&	{\bf 5}			&	5			&	5			&	5 \\
+b (4) &	0	&	5			&	9			&	9			&	{\bf 18}		&	{\bf 18}		&	18 \\
+c (1) &	0	& 5			&	9			&	9			&	18		&	18		&	{\bf 19} \\
+\hline
+\end{tabular}
+
+Notice the second $a$ in $Y$ does not get 3, it gets 5 instead.
+Then, we get the common subsequence $abc$ with a gain of 19; whereas in the normal LCS we get $bbc$, which has a gain of 18.
+
+Let's consider another example, where $X = bab$, $Y = abaa$, with the following table.
+
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+X \textbackslash Y & & a(1) & b(1) & a(1) & a(1) \\
+\hline
+	& 0 & 0 & 0 & 0 & 0 \\
+b (1) & 0 & 0 & 2 & 2 & 2 \\
+a (1) & {\bf 0} & 2 & 2 & 4 & 4 \\
+a (1) & 0 & {\bf 2} & 2 & 4 & 6 \\
+b (100) & 0 & 2 & {\bf 103} & {\bf 103} & {\bf 103} \\
+\hline
+\end{tabular}
+
+Notice we get the subsequence $ab$ with a gain of 103, whereas the normal LCS returns $baa$ with a gain of 6.
+That's it, everything seems to work, let's move on.
+\done

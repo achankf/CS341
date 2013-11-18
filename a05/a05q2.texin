@@ -1,0 +1,53 @@
+{\bf Idea}
+The observation is almost the same as question 1, except that the algorithm does not break whenever it reaches the threshold -- instead, it does look-ahead up to the next $80-72 = 8$ words (assuming each word has at least one character) for a word that ends with a $r$.
+
+For example, given the string ``aaa bbb cccc rrr rrr
+aaa rrr abc abc rrr
+abc".
+Suppose the formatting rule is 15:20, so we need 5 look-ahead words.
+The algorithm would create a table of $(X, Y)$, where $X$ is the number of characters in a line (space included), and $Y$ is the number of lines that end with a $r$.
+
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+line \textbackslash look-ahead & 0 & 1 & 2 & 3 & 4 \\
+\hline
+1 & (15,1) & (20,1) & (20,1) & (20,1) & (20,1) \\
+2 & (18,1) & (19,2) & (19,2) & (19,2) & (19,2) \\
+3 & (7, 1) & (3,2)  & (3,2) & (3,2) & (3,2) \\
+\hline
+\end{tabular}
+
+So we take the 20-19-3 decomposition, which looks like the following.
+\begin{verbatim}
+aaa bbb cccc rrr rrr
+aaa rrr abc abc rrr
+abc
+\end{verbatim}
+which is optimal because there are 2 lines that end with $r$.
+Notice without the extra look-ahead words, the result would look like
+\begin{verbatim}
+aaa bbb cccc rrr
+rrr aaa rrr abc abc
+rrr abc
+\end{verbatim}
+which is not optimal because only one line ends with $r$.
+However, it is optimal for Q1.
+
+Now the algorithm.
+\begin{algorithm}
+function findMaxLineR(text) // assuming length(text) = n
+	let count2D[8][n] be 2D array of zeroes
+	let num_endings[n] be array of zeroes
+
+	for i from 0 to 8 do // populate 2D table in Theta(n) time
+		let (tokens, count, n_end)
+			be populateMaxLine(text, 72, 80, 'r', i) // Theta(n)
+		set count2D[i] to count
+		set num_endings[i] to n_end
+	end for
+
+	find i such that num_endings[i] is maximum // Theta(n)
+	return recover(tokens, count2D[i]) // Theta(n)
+\end{algorithm}
+Notice that $i \le 8$ is constantly bounded, so {\tt populateMaxLine} runs in linear time.
+Consequently, the for loop is also constantly bounded, hence the running time for {\tt findMaxLineR} is $\Theta(n)$.

@@ -1,0 +1,68 @@
+{\bf Idea}
+Instead of treating the text in a character-by-character basis, we consider the text word-by-word.
+Like the knapsack problem, we first make sure that each word has a weight (its length), and then fill the line with words until the line reaches it threshold, and then make decision.
+
+An observation is that each line must either
+\begin{itemize}
+\item
+be filled up to the threshold (72-th to 80-th character);
+\item
+or the next word is too long, which forces a new line.
+\end{itemize}
+
+Assuming each word has less than 81 characters.
+Here we assume that every string stores its length, hence the length can be retrieved in $O(1)$.
+\begin{algorithm}
+function maxLine(text, L=72, H=80) // suppose length(text) = n
+
+	// Theta(n) -- 2n for avoiding reallocation from a "wordy" text
+	let ret_text be empty string of size 2n
+
+	// split the text into an array Theta(n)
+	let tokens be array for text tokenize by space character
+
+	let cur be 0
+	let is_new_line be true
+
+	for i from 0 to size(tokens) do // Theta(n)
+		set temp be cur + length(tokens[i])
+
+		// second character and beyond has a space in between
+		set temp += 1 whenever not new_line
+		if not is_new_line then
+			set temp += 1
+			append space into ret_text
+		end if
+
+		if temp < L then // don't need to split
+			set cur = temp
+			append token[i] into ret_text
+			set new_line to false
+			continue // avoid incrementing the line number
+		else if temp <= H then // 72 to 80 characters reached
+			set cur to 0
+			append token[i] + '\n' into ret_text
+		else // word too long, forced to start a new line
+			set cur to length(token[i])
+			append '\n' + token[i] into ret_text
+		end if
+		set is_new_line to true
+	end for
+
+	return ret_text
+\end{algorithm}
+The running time is $\Theta(n)$.
+Now prove the correctness by showing optimality.
+\begin{claim}
+The number of lines produced by {\tt maxLine} is maximized.
+\end{claim}
+\begin{proof}
+Suppose the solution of {\tt maxLine}, $S$, produces $n$ lines; but suppose by way of contradiction that the optimal solution $S^*$ has more lines, say $n+1$.
+
+Since both $S$ and $S^*$ come from the same text as input, the only possibility to make $S^*$ having more lines than $S$ is that $S^*$ has fewer number of words in each line.
+
+However, each line in $S^*$ cannot have fewer words, because by the above observation $S$ already has taken the minimal number of words.
+Thus, having fewer words than $S$ will make $S^*$ violates the formatting requirement.
+This means the possibility is false, hence we have a contradiction.
+\end{proof}
+\done

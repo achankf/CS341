@@ -1,0 +1,20 @@
+The description of the given decision problem is similar to the decision version of the travelling salesman problem.
+In other words, the following adjustments to the graph are needed:
+\begin{itemize}
+\item
+remove all edges that go toward $u$, so that $u$ is disjoint from the graph;
+\item
+then add an edge from $v$ to $u$ with weight 0, so that when the delivery person arrives at $v$, then it will immediately ``teleported" back to $u$ to complete the cycle;
+\end{itemize}
+So, if {\tt TSP} finds a cycle, then the non-repeating path from $u$ to $v$ exists.
+By the definition of {\tt TSP}, it finds the shortest non-repeating weighted cycle, so we need to ask 2 questions in order:
+\begin{itemize}
+\item
+Is {\tt TSP-D} for L false?
+This ensures {\bf no} path that has length less than $L$ exists.
+\item
+Is {\tt TSP-D} for $\infty$ true?
+This ensures {\bf at least 1} path that has length at least $L$ exists.
+\end{itemize}
+Since {\tt TSP-D} is NP-complete, so the given decision problem is also NP-complete.
+\done

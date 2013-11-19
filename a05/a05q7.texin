@@ -1,0 +1,17 @@
+{\bf Idea}
+This problem is the opposite of Q5 -- instead wanting vertices that are mutually exclusive, this problem wants everything to be connected, so that the critic can want everything consecutively.
+
+{\bf Decision Problem}
+Can the critic watch at least $K$ series, for some $K \ge 0$.
+
+{\bf Algorithm}
+\begin{itemize}
+\item
+Construct a graph $G = (V,E)$, such that each vertex represents a movie series, and every edge $(u,v) \in V \times V$ represents a movie series $u$ that does not overlap with series $v$.
+Notice we can build such a graph by ``brute-force" in $O(|N|^2 + |E|)$, where $N \ge V$ is the set of all movies; this operation is still in P.
+\item
+Return the result of {\tt Clique}$(G, K)$, which decides whether there exists a complete subgraph of $G$ that has at least $K$ vertices -- in our terms, whether the critic can watch at least $K$ series.
+According to the slides, {\tt Clique} is NP-complete.
+\end{itemize}
+Since the preprocessing is P, which is NP.
+So, by the sum rule, the algorithm is NP-complete.

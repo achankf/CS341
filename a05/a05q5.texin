@@ -1,24 +1,45 @@
-Let's reduce the problem into solving the Hamiltonian path.
-\begin{itemize}
-\item
-For each student, create a {\bf complete graph} where the vertices are labelled with the course names $c_1, \cdots, c_n$.
-This step is used for explanation and is not needed.
-\item
-Then, join the vertices that have the same label, and eliminate duplicate edges.
-If the algorithm selects 2 vertices that are connected by one edge, we know that we are making a consecutive schedule, because those 2 courses are taken {\bf together} by at least 1 student.
-Let's call the whole graph $G$.
-Here we just create an adjacency matrix, incrementing the edges, and at the end change values that are greater than 1 to 1, and then turn it into an adjacency list -- $O(|V|^2 + |E|)$, which is in P.
-\item
-The key point is the make the complement of $G$, into $G^c$, so that we have relationships of courses that are mutually exclusive amongst students.
-Here we just create a new adjacency list and loop through the old one -- $O(|V| + |E|)$, which is in P.
-\item
-Notice $G^c$ may or may not be connected.
-Suppose a single vertex $c_i$ is not connected, then it means that everyone takes the course $c_i$; in other words, no perfect scheduling exists.
-Finding the connected component is $O(|V| + |E|)$, which is in P; not needed, only for optimization to avoid the NP-complete check.
-\item
-If there exists a Hamiltonian path, then we know that the perfect scheduling exists, because each edge in $G^c$ represents courses that are mutually exclusive.
-So, the algorithm returns the result of {\tt HAMILTONIAN-PATH}$(G^c)$.
-This check is in NP-complete.
-\end{itemize}
-Therefore, since the preprocessing steps are in P, which is in NP, so by the sum rule the problem is NP-complete.
+Let {\tt CLASS} be the described decision problem.
+First, observe that the described mapping $f$ is bijective.
+
+{\bf Direction: {\tt CLASS} is in NP}
+
+Suppose the mapping $f : \{c_1, \cdots, c_n \} \rightarrow \{1,\cdots,n\}$ exists.
+Then, we can just loop the given set of classes; for each class we test against other classes.
+Thus, this verification algorithm is $\Theta(n^2)$.
+Therefore, {\tt CLASS} is in NP.
+
+{\bf Direction: {\tt CLASS} is in NP-Hard}
+
+Reduce {\tt HAMILTONIAN-PATH} to {\tt CLASS}.
+Given a graph $G = (V,E)$ as input to {\tt HAM-PATH}.
+Consider an alternative interpretation of $V$ and $E$:
+let $V$ be the set of classes, and each edge $uv \in E$ be \emph{no student taking both courses $u$ and $v$}.
+
+Now, consider the $G$'s complement, $G^c$.
+The interpretation of the vertices remains the same, but now each edge represents \emph{some students taking both courses}.
+Since finding the complement of a graph can be done in polynomial time, the preprocessing steps are in P.
+\begin{claim}
+Suppose $S_i$ is a set of neighbours in the adjacency list of $G^c$.
+{\tt CLASS}$(V,\cup^n_{i=1} S_i)$ returns ``yes" if and only if the given graph $G$ has a HAM-path.
+\end{claim}
+\begin{proof}
+{\bf YES direction}
+Suppose {\tt CLASS} returns ``yes."
+Then, the mapping $f : \{c_1, \cdots, c_n \} \rightarrow \{1,\cdots,n\}$ exists.
+Now, create a list of courses, $C$, sorted by $f(c)$, for $c \in V$.
+By definition, no student take both two consecutive courses $c_i, c_{i+1} \in C$.
+Thus, $c_ic_{i+1}$ is an edge in $G$.
+Since $f$ is bijective, so path $c_1,c_2,\cdots,c_n$ travels $n$ different vertices and it does not have repeating edge.
+Notice here $n = |V|$.
+Thus, a Hamiltonian path exists.
+
+{\bf NO direction}
+Suppose {\tt CLASS} returns ``no."
+Then, all students must have taken at least two courses, and one of which is taken by everyone, say course $v$.
+So, by definition $v$ must have edges to every vertices in $G^c$.
+Consequently, $v$ has no edge in $G$; so $G$ has at least 2 disjoint components.
+Therefore, $G$ cannot have a Hamiltonian cycle.
+\end{proof}
+Thus, {\tt HAM-PATH} is reduced to {\tt CLASS}, so {\tt CLASS} is NP-Hard.
+With both directions, {\tt CLASS} is NP-Complete.
 \done

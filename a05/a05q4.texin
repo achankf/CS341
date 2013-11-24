@@ -1,14 +1,14 @@
-Let {\tt DP-D} be the described decision problem.
+Let {\tt DELIVERY} be the described decision problem.
 
-{\bf Direction: {\tt DP-D} is in NP}
+{\bf Direction: {\tt DELIVERY} is in NP}
 
 If such a path exists, then we can run depth-first search to check the validity. Namely, the path cannot contain any non-white vertex upon discovery, and the length of the path is at least $L$.
-Therefore the check is linear; therefore, {\tt DP-D} is in NP.
+Therefore the check is linear; therefore, {\tt DELIVERY} is in NP.
 
-{\bf Direction: {\tt DP-D} is in NP-Hard}
+{\bf Direction: {\tt DELIVERY} is in NP-Hard}
 
 {\bf Idea}
-Reduce {\tt HAMILTONIAN-CYCLE} to {\tt HAMILTONIAN-PATH} to {\tt DP-D}.
+Reduce {\tt HAMILTONIAN-CYCLE} to {\tt HAMILTONIAN-PATH} to {\tt DELIVERY}.
 
 Let's show that {\tt HAMILTONIAN-CYCLE} $\le_P$ {\tt HAMILTONIAN-PATH}.
 Given a graph $G = (V,E)$ as the input of the Hamiltonian cycle.
@@ -25,20 +25,20 @@ So if we have the actual path for $G'$, we can interpret it by coalescing $v_1$ 
 Of course, only ``yes" or ``no" is returned from the decision problem.
 \end{itemize}
 Therefore, {\tt HAMILTONIAN-PATH} is NP-Hard.
-Now show that it can be reduced to {\tt DP-D}.
+Now show that it can be reduced to {\tt DELIVERY}.
 
 This part is simple.
 Given a graph $G = (V,E)$, and the target vertices, $v_1, v_2 \in V$, as the input of {\tt HAM-PATH}. 
 Then, copy $G$ into $G'$ and assign the weight 1 to every edge in $E$ for $G'$.
-Then, run {\tt DP-D} with $G'$, $v_1$, $v_2$, and $L = |V|$.
+Then, run {\tt DELIVERY} with $G'$, $v_1$, $v_2$, and $L = |V|$.
 If the result is ``yes" then $G$ has a HAM-Path.
 This reduction works because
 \begin{itemize}
 \item
-If {\tt DP-D} finds a path, $p$, from $v_1$ to $v_2$, then {\tt DP-D} guarantees that each vertex in $p$ is only visited once.
+If {\tt DELIVERY} finds a path, $p$, from $v_1$ to $v_2$, then {\tt DELIVERY} guarantees that each vertex in $p$ is only visited once.
 \item
 Also, no path can be longer than $L = |V|$, because otherwise, by the pigeonhole principle, some vertices are being visited twice.
 \end{itemize}
-Thus, {\tt DP-D} is in NP-Hard.
-Together with {\tt DP-D} in NP, {\tt DP-D} is in NP-Complete.
+Thus, {\tt DELIVERY} is in NP-Hard.
+With both directions, {\tt DELIVERY} is in NP-Complete.
 \done

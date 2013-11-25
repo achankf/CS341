@@ -33,7 +33,47 @@ rrr abc
 which is not optimal because only one line ends with $r$.
 However, it is optimal for Q1.
 
-Now the algorithm.
+Now the pseudocodes.
+\begin{algorithm}
+function populateMaxLine(text, L=72, H=80, ending='\0', ahead=0)
+	// suppose length(text) = n, split text into an array Theta(n)
+	let tokens be array of text tokenize by space character
+	let count be array of zeroes of size n // num char of lines
+	let num_ending be 0 // count how many line ends with "ending"
+	let line be 0 // iterator
+
+	for i from 0 to size(tokens) do // Theta(n)
+		set cur_len be count[line] + length(tokens[i])
+
+		if cur_len < L then // don't need to split
+			set count[line] to cur_len
+			continue // avoid incrementing the line number
+		else if cur_len <= H then // 72 to 80 characters reached
+
+			// keep looking for the last word that ends with the ending character; also, in the context that this helper is used, ahead is always bounded by a constant; O(1)
+			let prev_ideal = i
+			let prev_len be array of zeroes of size ahead // O(1) because ahead is constantly bounded by 8
+
+			for j from i to min(size(tokens), i + ahead) do
+				set prev_len[j-i] = cur_len + length(token[j])
+				if prev_len[j-i] <= H and last char of token[j] is ending then
+					set prev_ideal to j
+				end if
+			end for
+			set count[line] to prev_len[prev_ideal]
+			set i = prev_ideal
+
+		else // word too long, forced to start a new line
+			set count[line + 1] to length(token[i])
+		end if
+
+		set num_ending++ whenever last char of token[i] is ending
+		line++
+	end for
+
+	return (tokens, count, num_ending) // elements for recovery
+\end{algorithm}
+
 \begin{algorithm}
 function findMaxLineR(text) // assuming length(text) = n
 	let count2D[8][n] be 2D array of zeroes

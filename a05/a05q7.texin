@@ -1,17 +1,53 @@
-{\bf Idea}
-This problem is the opposite of Q5 -- instead wanting vertices that are mutually exclusive, this problem wants everything to be connected, so that the critic can want everything consecutively.
+{\bf Decision Problem -- {\tt SERIES}} (bad naming sense, I know)
 
-{\bf Decision Problem}
-Can the critic watch at least $K$ series, for some $K \ge 0$.
-
-{\bf Algorithm}
 \begin{itemize}
 \item
-Construct a graph $G = (V,E)$, such that each vertex represents a movie series, and every edge $(u,v) \in V \times V$ represents a movie series $u$ that does not overlap with series $v$.
-Notice we can build such a graph by ``brute-force" in $O(|N|^2 + |E|)$, where $N \ge V$ is the set of all movies; this operation is still in P.
+{\bf Input}
+A set of movie series $M = \{m_1, \cdots, m_n\}$, a collection of sets of intervals for each movie $A = (I_1, \cdots, I_n)$, where $I_i = \{(s,f) \in \mathbb{R}^2\}$, and an integer $K \ge 0$.
 \item
-Return the result of {\tt Clique}$(G, K)$, which decides whether there exists a complete subgraph of $G$ that has at least $K$ vertices -- in our terms, whether the critic can watch at least $K$ series.
-According to the slides, {\tt Clique} is NP-complete.
+{\bf Output}
+Return ``YES" if and only if the critic can watch at least $K$ movies.
 \end{itemize}
-Since the preprocessing is P, which is NP.
-So, by the sum rule, the algorithm is NP-complete.
+
+{\bf Direction: {\tt SERIES} is in NP}
+
+To verify the solution, we can run the same input to the actual output version of {\tt SERIES}, and then verify the results in a 2D loop to see whether each movie series in the solution is overlapping others or not.
+So the verification of the output version is in $O(n^2)$, so the output version is in NP.
+Since the output version is always harder than the decision version, so {\tt SERIES} is in NP.
+
+{\bf Direction: {\tt SERIES} is in NP-Hard}
+
+Reduce {\tt CLIQUE} to {\tt SERIES}.
+Given an \emph{undirected} graph $G = (V,E)$ as the input to {\tt CLIQUE}.
+Consider the following transformation:
+\begin{itemize}
+\item
+Let all $v \in V$ be distinct movie series, and all edges $(u,v) \in E$ representing no conflicts between series $u$ and $v$; O(1).
+\item
+For each movie series $m_i$, create the interval $(j-1,j)$ for each edge that is \emph{not} connected to $m_i$, and then store the intervals to $I_i$; $O(|V| + |E|)$.
+(Imagine G is an adjacency matrix, and we are replacing 0 with a unit interval, and replace 1 with nothing.)
+\item
+Let $K = |V|$; O(1).
+\end{itemize}
+So the preprocessing steps are in P.
+\begin{claim}
+The graph $G = (V,E)$ has a clique if and only if {\tt SERIES}$(V, (I_1,\cdots,I_n), K=|V|)$ returns ``YES."
+\end{claim}
+\begin{proof}
+Let's consider two directions:
+
+{\bf Suppose {\tt SERIES} returns ``yes."}
+So the critic can watch at least $K$ series.
+However, the critic cannot watch beyond $K$ series because $K = |V|$, so there are no more than $K$ series.
+Thus, the critic can watch exactly $K$ series.
+Consequently, all $K$ series have no conflict amongst each others; by definition of how we transform $G$, it means that each vertex is connected to all other vertices.
+In other words, $G$ is a clique.
+
+{\bf Suppose $G$ has a clique}
+Since $G$ is a complete graph, so every vertices are connected to all other vertices, so all $I_i$ contains nothing, for all $1 \le i \le |V|$.
+In other words, every movie series in $V$ do not have conflicts with each others, so the critic can watch all $K = |V|$ movies series.
+Thus, {\tt SERIES} returns ``YES."
+\end{proof}
+Thus, {\tt CLIQUE} is reduced to {\tt SERIES}, so {\tt SERIES} is NP-Hard.
+With both directions, {\tt SERIES} is NP-Complete.
+\done

@@ -20,7 +20,7 @@ The interpretation of the vertices remains the same, but now each edge represent
 Since finding the complement of a graph can be done in polynomial time, the preprocessing steps are in P.
 \begin{claim}
 Suppose $S_i$ is a set of neighbours in the adjacency list of $G^c$.
-{\tt CLASS}$(V,\cup^n_{i=1} S_i)$ returns ``yes" if and only if the given graph $G$ has a HAM-path.
+{\tt CLASS}$(V,(S_1,\cdots,S_n))$ returns ``yes" if and only if the given graph $G$ has a HAM-path.
 \end{claim}
 \begin{proof}
 {\bf YES direction}

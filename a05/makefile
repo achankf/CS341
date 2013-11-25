@@ -6,7 +6,6 @@ all: $(OUT)
 
 $(OUT):$(IN) $(INCLUDE)
 	pdflatex $<
-	pdflatex $<
 
 .phony: clean
 clean:

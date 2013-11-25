@@ -1,51 +1,37 @@
 {\bf Idea}
 Instead of treating the text in a word-by-word basis.
-Here, dynamic programming is used to populate a 1D array of number of characters in for each line, with no special ending nor look-ahead word.
-Please take a look at column 0 of the example in Q2 as an example.
+Here, the greedy approach is used to populate a 1D array of number of characters in for each line.
 
 An observation is that each line breaks whenever
 \begin{itemize}
 \item
-be filled up with words up to the threshold (72-th to 80-th character, with look-ahead words for target ending characters -- in this question, 1 word, aka the current word);
+be filled up with words up to the threshold;
 \item
 or the next word is too long, which forces a new line.
 \end{itemize}
 Assuming each word has less than 81 characters.
 Here we assume that every string stores its length, hence the length can be retrieved in $O(1)$.
-{\bf {\tt populateMaxLine} will be reused in Q2}.
 \begin{algorithm}
-function populateMaxLine(text, L=72, H=80, ending='\0', ahead=0)
+function populateMaxLine(text, L=72, H=80)
 	// suppose length(text) = n, split text into an array Theta(n)
 	let tokens be array of text tokenize by space character
 	let count be array of zeroes of size n // num char of lines
-	let num_ending be 0 // count how many line ends with "ending"
 	let line be 0 // iterator
 
 	for i from 0 to size(tokens) do // Theta(n)
-		set temp be count[line] + length(tokens[i])
+		set cur_len be count[line] + length(tokens[i])
 
-		if temp < L then // don't need to split
-			set count[line] to temp
+		if cur_len < L then // don't need to split
+			set count[line] to cur_len
 			continue // avoid incrementing the line number
-		else if temp <= H then // 72 to 80 characters reached
-
-			// keep looking in a "best-fit" manner until the first ending character is found or the number of look-ahead limit reached; also, in the context that this helper is used, ahead is always bounded by a constant; O(1)
-			for j from i to min(size(tokens), i + ahead)
-				temp += length(token[j])
-				break whenever temp <= 80 and last char of token[j] is ending
-			end for
-			set count[line] to temp
-			set i = j
-
+		else if cur_len <= H then // 72 to 80 characters reached
+			set count[line] to cur_len
 		else // word too long, forced to start a new line
 			set count[line + 1] to length(token[i])
 		end if
-
-		set num_ending++ whenever last char of token[i] is ending
-		line++
 	end for
 
-	return (tokens, count, num_ending) // elements for recovery
+	return (tokens, count) // elements for recovery
 \end{algorithm}
 Then we can recover the formatted string, but I omitted the recovery function because it is trivial -- we have tokens in the correct order and the number of characters in each line, so we just need to walk through both arrays and add space characters when necessary, in $\Theta(n)$, where $n$ is the length of the input text.
 \begin{algorithm}

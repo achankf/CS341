@@ -45,7 +45,7 @@ Notice the table in part a) is what the following algorithm will produce.
 The last interval is part of the optimal solution if and only if it must be non-overlapping with the others intervals that are in the optimal solution.
 
 {\bf Overlapping Property}
-As a consequence of the optimal structure, given intervals $i_k, i_{k-1} \in I$, then the perference for $i_{k-1}$ is the sum of $p_k + p_{k-1}$.
+As a consequence of the optimal structure, given intervals $i_k, i_{k-1} \in I$, then the perference for $i_{k-1}$ is the sum of $p_k + p_{k-1}$ ($p$ for preference).
 
 Also, since the algorithm is doing things in reverse, so the it needs to sort by the lastest starting time instead of earliest finishing time.
 \begin{algorithm}

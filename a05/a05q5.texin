@@ -27,7 +27,7 @@ Suppose $S_i$ is a set of neighbours in the adjacency list of $G^c$.
 Suppose {\tt CLASS} returns ``yes."
 Then, the mapping $f : \{c_1, \cdots, c_n \} \rightarrow \{1,\cdots,n\}$ exists.
 Now, create a list of courses, $C$, sorted by $f(c)$, for $c \in V$.
-By definition, no student take both two consecutive courses $c_i, c_{i+1} \in C$.
+By definition, no student take two consecutive courses $c_i, c_{i+1} \in C$.
 Thus, $c_ic_{i+1}$ is an edge in $G$.
 Since $f$ is bijective, so path $c_1,c_2,\cdots,c_n$ travels $n$ different vertices and it does not have repeating edge.
 Notice here $n = |V|$.
@@ -35,7 +35,7 @@ Thus, a Hamiltonian path exists.
 
 {\bf NO direction}
 Suppose {\tt CLASS} returns ``no."
-Then, all students must have taken at least two courses, and one of which is taken by everyone, say course $v$.
+Then, all students must have taken at least two courses, and \emph{one of which is taken by everyone}, say course $v$.
 So, by definition $v$ must have edges to every vertices in $G^c$.
 Consequently, $v$ has no edge in $G$; so $G$ has at least 2 disjoint components.
 Therefore, $G$ cannot have a Hamiltonian cycle.

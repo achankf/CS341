@@ -5,7 +5,7 @@ Here, the greedy approach is used to populate a 1D array of number of characters
 An observation is that each line breaks whenever
 \begin{itemize}
 \item
-be filled up with words up to the threshold;
+be filled up with words up to the threshold (72-80 char) and break immediately;
 \item
 or the next word is too long, which forces a new line.
 \end{itemize}

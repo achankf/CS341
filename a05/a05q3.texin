@@ -26,7 +26,8 @@ D[i,j] &=
 \end{align*}
 Finally, the rest are the same as the LCS.
 
-Let's do some ``engineer proofs."
+I think the argument above is sound even without the pseudocodes.
+So let's do some ``engineer proofs" to convince you.
 Given $X = abbc$ and $Y = bbabac$, with given weights as shown in the table.
 
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
@@ -44,7 +45,8 @@ c (1) &	0	& 5			&	9			&	9			&	18		&	18		&	{\bf 19} \\
 Notice the second $a$ in $Y$ does not get 3, it gets 5 instead.
 Then, we get the common subsequence $abc$ with a gain of 19; whereas in the normal LCS we get $bbc$, which has a gain of 18.
 
-Let's consider another example, where $X = bab$, $Y = abaa$, with the following table.
+Let's consider another example where the weighted LCS is shorter than the LCS.
+Given $X = bab$, $Y = abaa$, with the following table.
 
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline

@@ -12,8 +12,7 @@ Return ``YES" if and only if the critic can watch at least $K$ movies.
 {\bf Direction: {\tt SERIES} is in NP}
 
 To verify the solution, we can run the same input to the actual output version of {\tt SERIES}, and then verify the results in a 2D loop to see whether each movie series in the solution is overlapping others or not.
-So the verification of the output version is in $O(n^2)$, so the output version is in NP.
-Since the output version is always harder than the decision version, so {\tt SERIES} is in NP.
+So the verification of the output version is in $O(n^2)$, so its decision version is in NP.
 
 {\bf Direction: {\tt SERIES} is in NP-Hard}
 
@@ -23,11 +22,12 @@ Consider the following transformation:
 \begin{itemize}
 \item
 Let all $v \in V$ be distinct movie series, and all edges $(u,v) \in E$ representing no conflicts between series $u$ and $v$; O(1).
+Let $K = |V|$; O(1).
 \item
-For each movie series $m_i$, create the interval $(j-1,j)$ for each edge that is \emph{not} connected to $m_i$, and then store the intervals to $I_i$; $O(|V| + |E|)$.
+For each movie series $m_i$, create the interval $(j-1,j)$ for each vertex $m_j$ that is \emph{not} connected to $m_i$, and then store the intervals to $I_i$; $O(|V| + |E|)$.
 (Imagine G is an adjacency matrix, and we are replacing 0 with a unit interval, and replace 1 with nothing.)
 \item
-Let $K = |V|$; O(1).
+Finally, add an unit interval $(i-1,i)$ for each $(i,i)$-th entry in the matrix.
 \end{itemize}
 So the preprocessing steps are in P.
 \begin{claim}

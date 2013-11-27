@@ -1,94 +1,57 @@
 {\bf Idea}
-The observation is almost the same as question 1, except that the algorithm does not break whenever it reaches the threshold -- instead, it does look-ahead up to the next $80-72 = 8$ words (assuming each word has at least one character) for a word that ends with a $r$.
+First think about how we make the algorithm in exponential time, and then think about it in the \emph{reverse} direction.
 
-For example, given the string ``aaa bbb cccc rrr rrr
-aaa rrr abc abc rrr
-abc".
-Suppose the formatting rule is 16:20, so we need 5 look-ahead words.
-The algorithm would create a table of $(X, Y)$, where $X$ is the number of characters in a line (space included), and $Y$ is the number of lines that end with a $r$.
+{\bf Exponential Method}
+\begin{itemize}
+\item
+{\bf Base Case}
+If the input has one word left, $w_n$, return 1 if $w_n$ ends with $R$; otherwise return 0.
+\item
+Starting from the first word, keep searching until the minimum threshold is reached (just above or equal 72) at word $w_i$.
+\item
+For each word after $w_i$ up to $80-72=8$ extra words (I'm being \emph{too} generous for the bound, can be less due to spaces), say at $w_j$ ($i \le j$), copy the input text without $w_1$ to $w_j$ and then recurse.
+{\bf Notice finding the 8 extra words is $O(1)$.}
+\item
+Finally, when recursion starts to unfold, it picks the choice (from at most 8 possible choices in each recursion branch) that gives the most lines that end with $R$.
+\end{itemize}
 
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline
-line \textbackslash look-ahead & 0 & 1 & 2 & 3 & 4 \\
-\hline
-1 & (16,1) & (20,1) & (20,1) & (20,1) & (20,1) \\
-2 & (19,1) & (19,2) & (19,2) & (19,2) & (19,2) \\
-3 & (7, 1) & (3,2)  & (3,2) & (3,2) & (3,2) \\
-\hline
-\end{tabular}
+{\bf Optimal Structure}
+Depending on the spelling, the last word always end with either no $R$ or 1 $R$.
+The last line either end with the last word, or the second last word, and so on.
 
-So we take the 20-19-3 decomposition, which looks like the following.
-\begin{verbatim}
-aaa bbb cccc rrr rrr
-aaa rrr abc abc rrr
-abc
-\end{verbatim}
-which is optimal because there are 2 lines that end with $r$.
-Notice without the extra look-ahead words, the result would look like
-\begin{verbatim}
-aaa bbb cccc rrr
-rrr aaa rrr abc abc
-rrr abc
-\end{verbatim}
-which is not optimal because only one line ends with $r$.
-However, it is optimal for Q1.
+{\bf Overlapping Property}
+Notice that the last word is being used for calculation for many times at the end, and it is needed by the previous sub-problem.
 
-Now the pseudocodes.
+{\bf Dynamic Programming}
+
+The point is to use a book-keeping array of pairs of (index, number of $R$'s), built from the end to the beginning, to keep track of next possible line break.
+For example, if it is $w_i$'s turn, then the algorithm looks for the next 8 possible words (after the 72 char threshold) after $w_i$, and choose the one that has the most $R$ endings.
 \begin{algorithm}
-function populateMaxLine(text, L=72, H=80, ending='\0', ahead=0)
-	// suppose length(text) = n, split text into an array Theta(n)
-	let tokens be array of text tokenize by space character
-	let count be array of zeroes of size n // num char of lines
-	let num_ending be 0 // count how many line ends with "ending"
-	let line be 0 // iterator
+// helper function for counting whether a given word ends with a R; O(1)
+function isLastCharR(word)
+	return 1 if last char of words[n-1] is R; otherwise 0
+end function
 
-	for i from 0 to size(tokens) do // Theta(n)
-		set cur_len be count[line] + length(tokens[i])
+function dynamicBreakR(words, L=72, H=80) // n words in total
+	// set up the book-keeping array and initialize it so that every word ends with w_n by default.
+	let bpos be array of n of size n // break position
+	let numR be array of 0 of size n // number of endings of R
 
-		if cur_len < L then // don't need to split
-			set count[line] to cur_len
-			continue // avoid incrementing the line number
-		else if cur_len <= H then // 72 to 80 characters reached
+	// "base case" set up for the last word
+	set numR[n-1] to isLastCharR(word[n-1])
 
-			// keep looking for the last word that ends with the ending character; also, in the context that this helper is used, ahead is always bounded by a constant; O(1)
-			let prev_ideal = i
-			let prev_len be array of zeroes of size ahead // O(1) because ahead is constantly bounded by 8
-
-			for j from i to min(size(tokens), i + ahead) do
-				set prev_len[j-i] = cur_len + length(token[j])
-				if prev_len[j-i] <= H and last char of token[j] is ending then
-					set prev_ideal to j
-				end if
-			end for
-			set count[line] to prev_len[prev_ideal]
-			set i = prev_ideal
-
-		else // word too long, forced to start a new line
-			set count[line + 1] to length(token[i])
-		end if
-
-		set num_ending++ whenever last char of token[i] is ending
-		line++
+	// notice the loop is going from top to bottom
+	for i from n-2 to 0 do
+		// find the index that reaches the threshold -- taken space character into consideration like Q1; O(1) due to constant bound of 80
+		let p be index for the first word that reaches 72 char or reaches end of text
+		// find the optimal break from the next possible 8 words in and after w_p; taken space characters into consideration, like Q1; O(1) due to constant bound of 8
+		set p to find max of numR[j] for j from p to p + 8
+		bpos[i] = p
+		numR[i] = numR[p] + isLastCharR(word[i])
+		find 
 	end for
-
-	return (tokens, count, num_ending) // elements for recovery
+end function
 \end{algorithm}
-
-\begin{algorithm}
-function findMaxLineR(text) // assuming length(text) = n
-	let count2D[8][n] be 2D array of zeroes
-	let num_endings[n] be array of zeroes
-
-	for i from 0 to 8 do // populate 2D table in Theta(n) time
-		let (tokens, count, n_end)
-			be populateMaxLine(text, 72, 80, 'r', i) // Theta(n)
-		set count2D[i] to count
-		set num_endings[i] to n_end
-	end for
-
-	find i such that num_endings[i] is maximum // Theta(n)
-	return recover(tokens, count2D[i]) // Theta(n)
-\end{algorithm}
-Notice that $i \le 8$ is constantly bounded, so {\tt populateMaxLine} runs in linear time.
-Consequently, the for loop is also constantly bounded, hence the running time for {\tt findMaxLineR} is $\Theta(n)$.
+With reasonings above, the run time is $\Theta(n)$.
+Since we have the book-keeping array, we can recover the formatted 
 \done
